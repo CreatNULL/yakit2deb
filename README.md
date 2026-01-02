@@ -82,20 +82,25 @@
  - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
  - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
  - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
-
+ - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html (debconf)
 
 
 ## 其他
 ### 编写原则
 #### (1)、维护脚本幂等性
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency
 ✅ 成功后再运行：保持现状，不报错
 ✅ 失败后重新运行：继续完成剩余工作
 ❌ 不能假设：这是第一次运行或环境是干净的
 ❌ 不能重复：已经完成的操作
 <img width="925" height="246" alt="image" src="https://github.com/user-attachments/assets/54d55eaf-884a-48d8-9e22-e3a444294d32" />
-<img width="1005" height="270" alt="image" src="https://github.com/user-attachments/assets/ade4399c-f0ba-400c-97fc-0c2afca1b9c8" />
+
 
 #### (2)、脚本应该保持安静，避免不必要的输出
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9
-<img width="1136" height="596" alt="image" src="https://github.com/user-attachments/assets/de04969a-de45-4dad-8633-e689af022a93" />
-<img width="908" height="700" alt="image" src="https://github.com/user-attachments/assets/c808291a-61d4-4876-b088-8f2c0d2aa2c9" />
+https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
+
+#### (3)、允许交互，但有严格条件
+https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1
+包应尽量减少需要提示的次数， 并且他们应确保用户只会被问到每一个 问一次。升级时不应再问同样的问题， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
+
+
