@@ -2,17 +2,18 @@
  每次都是 AppImage，没找到 .deb 的安装包，琢磨着给他搞成.deb <br/>
  - 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage </br>
  - 进入解压后的目录（squashfs-root) AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录
- 
-Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
+ - Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
 
 ## 原理：
-先获取版本，然后下载，然后把 AppImage 解压，然后放到指定的目录，创建启动脚本 /usr/bin/yakit , 添加 .desktop 文件
+- 先检测，先获取版本，创建 /usr/share/yakit/, 然后下载输出到目录，把 AppImage 解压，修改权限，创建启动脚本 /usr/bin/yakit，修改权限 , 添加 .desktop 文件。
 
 编写参考文档：
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
  - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
  - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
-
+ - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
+ - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
+ 
 ### 请求获取版本信息
 <img width="1577" height="878" alt="image" src="https://github.com/user-attachments/assets/bf101232-5ba7-4918-bb34-d71ec224aca6" />
 
