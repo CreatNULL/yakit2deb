@@ -7,13 +7,39 @@
 ## 原理：
 - 安装： 先从官网获取最新的版本，创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限，把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限，创建启动脚本 /usr/bin/yakit，修改权限 , 添加 .desktop 文件。
 
+编写主要涉及：preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
+- 安装前执行的脚本 -> preinst
+- 安装后执行的脚本 -> postinst
+- 卸载前执行的脚本 -> prerm
+- 卸载后执行的脚本 -> postrm
+
+正常安装流程：
+- 安装前执行的脚本 -> preinst
+- 安装后执行的脚本 -> postinst
+
+已经安装的情况下，又执行了一次 dpkg -i (顺序看着很奇怪，但是确实这样）
+ - 卸载前执行的脚本 -> prerm
+ - 安装前执行的脚本 -> preinst
+ - 卸载后执行的脚本 -> postrm
+ - 安装后执行的脚本 -> postinst
+
+卸载
+- 卸载前执行的脚本 -> prerm
+- 卸载后执行的脚本 -> postrm
+
+
 编写参考文档：
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
  - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
+ - https://wiki.debian.org/MaintainerScripts (重复安装，正常安装，安装失败 执行流程图）
  - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
  - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
  - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
- 
+
+
+
+
+
 ### 请求获取版本信息
 <img width="1577" height="878" alt="image" src="https://github.com/user-attachments/assets/bf101232-5ba7-4918-bb34-d71ec224aca6" />
 
