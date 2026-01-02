@@ -14,18 +14,22 @@
 - 卸载后执行的脚本 -> postrm
 
 正常安装流程：
-- 安装前执行的脚本 -> preinst
-- 安装后执行的脚本 -> postinst
+- 安装前执行的脚本 -> preinst ($1的值: install)
+- 安装后执行的脚本 -> postinst ($1的值: configure)
 
 已经安装的情况下，又执行了一次 dpkg -i (顺序看着很奇怪，但是确实这样）
- - 卸载前执行的脚本 -> prerm
- - 安装前执行的脚本 -> preinst
- - 卸载后执行的脚本 -> postrm
- - 安装后执行的脚本 -> postinst
+ - 卸载前执行的脚本 -> prerm ($1的值：upgrade)
+ - 安装前执行的脚本 -> preinst ($1的值：upgrade)
+ - 卸载后执行的脚本 -> postrm ($1的值：upgrade)
+ - 安装后执行的脚本 -> postinst ($1的值: configure)
+依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，因为如果没有安装，就不存在进程在运行的情况，如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
+而 preinst 我就用来检查一些必要的依赖。
+
 
 卸载
-- 卸载前执行的脚本 -> prerm
-- 卸载后执行的脚本 -> postrm
+- 卸载前执行的脚本 -> prerm  ($1的值: remove)
+- 卸载后执行的脚本 -> postrm ($1的值: remove)
+
 
 
 编写参考文档：
