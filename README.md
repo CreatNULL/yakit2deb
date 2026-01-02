@@ -54,12 +54,12 @@
 - 续行必须以空格或制表符开头
 - 空行看着得用 .
 
-#### (2)、维护脚本幂等性
-https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency
-✅ 成功后再运行：保持现状，不报错
-✅ 失败后重新运行：继续完成剩余工作
-❌ 不能假设：这是第一次运行或环境是干净的
-❌ 不能重复：已经完成的操作
+#### (2)、维护脚本幂等性<br />
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency<br />
+✅ 成功后再运行：保持现状，不报错<br />
+✅ 失败后重新运行：继续完成剩余工作<br />
+❌ 不能假设：这是第一次运行或环境是干净的<br />
+❌ 不能重复：已经完成的操作<br />
 
 #### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts
