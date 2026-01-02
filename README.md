@@ -92,22 +92,49 @@
 ### 编写原则
 #### (1)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html
-- 好多
 - 续行必须以空格或制表符开头
-<img width="1197" height="509" alt="image" src="https://github.com/user-attachments/assets/ff686210-2e70-4e0b-aea2-3b248e9f2f65" />
-- 空行看着应该是得用 .
-<img width="1112" height="568" alt="image" src="https://github.com/user-attachments/assets/e67a6762-f269-44ef-9f1f-36a759163fbc" />
+- 空行看着得用 .
 
-
-#### (1)、维护脚本幂等性
+#### (2)、维护脚本幂等性
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency
 ✅ 成功后再运行：保持现状，不报错
 ✅ 失败后重新运行：继续完成剩余工作
 ❌ 不能假设：这是第一次运行或环境是干净的
 ❌ 不能重复：已经完成的操作
 
+### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts
+丢给AI，让他理解一下：
 
-#### (2)、允许交互，但有严格条件
+您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
+核心规定解析
+**1. 基本限制**
+原文："Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."
+含义：
+维护脚本不能保证有控制终端可用
+可能无法与用户进行交互
+必须设计为能在无终端环境下工作
+**2. 必须支持非交互式回退**
+原文："They must be able to fall back to noninteractive behavior if no controlling terminal is available."
+要求：
+脚本必须检测终端可用性
+无终端时必须自动切换到非交互模式
+不能因为无法交互而卡住或失败
+**3. 使用 Debconf 的例外**
+原文："Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."
+含义：
+如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况
+Debconf 会自动根据环境选择适当的行为
+**4. 高优先级提示的特殊处理**
+原文："For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."
+限制：
+只有没有合理默认值的高优先级提示才允许在无终端时中止
+但这种情况应该尽量避免
+用户通常认为这是包的bug
+
+那我就用 debconf
+
+#### (4)、尽量减少需要提示的次数
 > https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1
 > 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
 
@@ -122,5 +149,5 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Mainta
 看着，感觉 defconf 
 - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
-#### (3)、脚本应该保持安静，避免不必要的输出
+#### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
