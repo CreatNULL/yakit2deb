@@ -176,3 +176,4 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
  - https://wiki.debian.org/debconf (debconf 介绍)
  - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
  - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
+ - https://linux.extremeoverclocking.com/man/3/confmodule ( defconf模块的 基本的简介）
