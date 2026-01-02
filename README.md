@@ -49,19 +49,19 @@
 程序正在运行，提示是否结束
 
 ## 编写原则
-#### (1)、DEBIAN/control 文件
+### (1)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html
 - 续行必须以空格或制表符开头
 - 空行看着得用 .
 
-#### (2)、维护脚本幂等性<br />
+### (2)、维护脚本幂等性<br />
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency<br />
 ✅ 成功后再运行：保持现状，不报错<br />
 ✅ 失败后重新运行：继续完成剩余工作<br />
 ❌ 不能假设：这是第一次运行或环境是干净的<br />
 ❌ 不能重复：已经完成的操作<br />
 
-#### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
+### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts
 丢给AI，让他理解一下：
 
@@ -104,7 +104,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 
 那我就用 debconf
 
-#### (4)、尽量减少需要提示的次数
+### (4)、尽量减少需要提示的次数
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
 > 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
 
@@ -119,7 +119,7 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
 看着，感觉 defconf 
 - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
-#### (5)、脚本应该保持安静，避免不必要的输出
+### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
 
 
