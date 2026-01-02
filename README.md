@@ -62,7 +62,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Mainta
 ❌ 不能重复：已经完成的操作<br />
 
 ### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
-https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts<br />
 丢给AI，让他理解一下：
 
 您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
