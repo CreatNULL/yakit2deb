@@ -1,4 +1,4 @@
-http://www.fifi.org/doc/debconf-doc/tutorial.html
+原文: http://www.fifi.org/doc/debconf-doc/tutorial.html
 
 # Debconf 程序员教程
 
@@ -9,19 +9,6 @@ joeyh@debian.org
 版权所有 © 1999, 2000 乔伊·赫斯
 
 本文遵循 BSD 许可证条款（无广告条款）由作者版权所有。
-
-## 目录
-- 简介
-- 开始使用
-- 模板文件
-- 配置脚本
-- 修改现有的维护者脚本
-- 收尾工作
-- 测试
-- 故障排除
-- 高级主题
-- A. 命令
-- B. 问题层次结构
 
 ## 简介
 本指南介绍了如何在您的软件包中使用 debconf，面向 Debian 开发者。
