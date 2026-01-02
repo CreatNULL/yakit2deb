@@ -119,6 +119,47 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
 看着，感觉 defconf 
 - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
+看看，有啥命令 db_set、db_input 等等
+```bash
+┌──(vbgaga㉿kali)-[~]
+└─$ tail -n 35  /usr/share/debconf/confmodule
+
+db_capb ()      { _db_cmd "CAPB $@"; }
+db_set ()       { _db_cmd "SET $@"; }
+db_reset ()     { _db_cmd "RESET $@"; }
+db_title ()     { _db_cmd "TITLE $@"; }
+db_input ()     { _db_cmd "INPUT $@"; }
+db_beginblock () { _db_cmd "BEGINBLOCK $@"; }
+db_endblock ()  { _db_cmd "ENDBLOCK $@"; }
+db_go ()        { _db_cmd "GO $@"; }
+db_get ()       { _db_cmd "GET $@"; }
+db_register ()  { _db_cmd "REGISTER $@"; }
+db_unregister () { _db_cmd "UNREGISTER $@"; }
+db_subst ()     { _db_cmd "SUBST $@"; }
+db_fset ()      { _db_cmd "FSET $@"; }
+db_fget ()      { _db_cmd "FGET $@"; }
+db_purge ()     { _db_cmd "PURGE $@"; }
+db_metaget ()   { _db_cmd "METAGET $@"; }
+db_version ()   { _db_cmd "VERSION $@"; }
+db_clear ()     { _db_cmd "CLEAR $@"; }
+db_settitle ()  { _db_cmd "SETTITLE $@"; }
+db_previous_module () { _db_cmd "PREVIOUS_MODULE $@"; }
+db_info ()      { _db_cmd "INFO $@"; }
+db_progress ()  { _db_cmd "PROGRESS $@"; }
+db_data ()      { _db_cmd "DATA $@"; }
+db_x_loadtemplatefile ()        { _db_cmd "X_LOADTEMPLATEFILE $@"; }
+
+# An old alias for input.
+db_text () {
+        db_input $@
+}
+
+# Cannot read a return code, since there is none and it would block.
+db_stop () {
+        echo STOP >&3
+}
+```
+
 ### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
 
