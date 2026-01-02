@@ -76,6 +76,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 - 可能无法与用户进行交互<br />
 - 必须设计为能在无终端环境下工作<br />
 <br />
+
 **2. 必须支持非交互式回退**<br />
 原文：
 - "They must be able to fall back to noninteractive behavior if no controlling terminal is available."<br />
@@ -84,6 +85,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 - 无终端时必须自动切换到非交互模式<br />
 - 不能因为无法交互而卡住或失败<br />
 <br />
+
 **3. 使用 Debconf 的例外**<br />
 原文：
 - "Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."<br />
@@ -91,6 +93,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 - 如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况<br />
 - Debconf 会自动根据环境选择适当的行为<br />
 <br />
+
 **4. 高优先级提示的特殊处理**<br />
 原文：
 - "For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."<br />
