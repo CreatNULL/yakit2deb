@@ -67,12 +67,13 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 
 您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
 核心规定解析
+
 **1. 基本限制**
-原文："Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."
-含义：
-维护脚本不能保证有控制终端可用
-可能无法与用户进行交互
-必须设计为能在无终端环境下工作
+原文："Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."<br/>
+含义：</br>
+维护脚本不能保证有控制终端可用</br>
+可能无法与用户进行交互</br>
+必须设计为能在无终端环境下工作<br/>
 
 **2. 必须支持非交互式回退**
 原文："They must be able to fall back to noninteractive behavior if no controlling terminal is available."
