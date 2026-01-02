@@ -69,31 +69,31 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 核心规定解析
 
 **1. 基本限制**
-原文："Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."<br/>
-含义：</br>
-维护脚本不能保证有控制终端可用</br>
-可能无法与用户进行交互</br>
-必须设计为能在无终端环境下工作<br/>
+&nbsp;&nbsp;原文："Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."<br/>
+&nbsp;&nbsp;含义：</br>
+&nbsp;&nbsp;维护脚本不能保证有控制终端可用</br>
+&nbsp;&nbsp;可能无法与用户进行交互</br>
+&nbsp;&nbsp;必须设计为能在无终端环境下工作<br/>
 
 **2. 必须支持非交互式回退**
-原文："They must be able to fall back to noninteractive behavior if no controlling terminal is available."
-要求：
-脚本必须检测终端可用性
-无终端时必须自动切换到非交互模式
-不能因为无法交互而卡住或失败
+&nbsp;&nbsp;原文："They must be able to fall back to noninteractive behavior if no controlling terminal is available."<br/>
+&nbsp;&nbsp;要求：<br/>
+&nbsp;&nbsp;脚本必须检测终端可用性<br/>
+&nbsp;&nbsp;无终端时必须自动切换到非交互模式<br/>
+&nbsp;&nbsp;不能因为无法交互而卡住或失败<br/>
 
 **3. 使用 Debconf 的例外**
-原文："Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."
-含义：
-如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况
-Debconf 会自动根据环境选择适当的行为
+&nbsp;&nbsp;原文："Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."<br/>
+&nbsp;&nbsp;含义：<br/>
+&nbsp;&nbsp;如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况<br/>
+&nbsp;&nbsp;Debconf 会自动根据环境选择适当的行为<br/>
 
 **4. 高优先级提示的特殊处理**
-原文："For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."
-限制：
-只有没有合理默认值的高优先级提示才允许在无终端时中止
-但这种情况应该尽量避免
-用户通常认为这是包的bug
+原文："For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."<br/>
+&nbsp;&nbsp;限制：<br/>
+&nbsp;&nbsp;只有没有合理默认值的高优先级提示才允许在无终端时中止<br/>
+&nbsp;&nbsp;但这种情况应该尽量避免<br/>
+&nbsp;&nbsp;用户通常认为这是包的bug<br/>
 
 那我就用 debconf
 
