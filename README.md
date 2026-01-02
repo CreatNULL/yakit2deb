@@ -3,7 +3,7 @@
  - 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage </br>
  - 进入解压后的目录（squashfs-root) AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录
  
-Yakit-xxx-xxx.AppImage 都是从官网下载的, 我只是大自然的搬运工o(=•ェ•=)m
+Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
 
 ## 原理：
 先获取版本，然后下载，然后把 AppImage 解压，然后放到指定的目录，创建启动脚本 /usr/bin/yakit , 添加 .desktop 文件
@@ -40,6 +40,3 @@ Yakit-xxx-xxx.AppImage 都是从官网下载的, 我只是大自然的搬运工o
 程序正在运行，提示是否结束
 <img width="1164" height="781" alt="image" src="https://github.com/user-attachments/assets/9cb8c50b-d571-4ce7-8cf9-26bd3abf4b09" />
 
-
-# yakit 官网：
-https://www.yaklang.com/
