@@ -5,7 +5,7 @@
  - Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
 
 ## 原理：
-- 先检测，先获取版本，创建 /usr/share/yakit/, 然后下载输出到目录，把 AppImage 解压，修改权限，创建启动脚本 /usr/bin/yakit，修改权限 , 添加 .desktop 文件。
+- 安装： 先从官网获取最新的版本，创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限，把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限，创建启动脚本 /usr/bin/yakit，修改权限 , 添加 .desktop 文件。
 
 编写参考文档：
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
