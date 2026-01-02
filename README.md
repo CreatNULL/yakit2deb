@@ -45,51 +45,10 @@
 依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，因为如果没有安装，就不存在进程在运行的情况，如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
 而 preinst 我就用来检查一些必要的依赖。
 
-
-## 部分内容展示
-### 请求获取版本信息
-<img width="1577" height="878" alt="image" src="https://github.com/user-attachments/assets/bf101232-5ba7-4918-bb34-d71ec224aca6" />
-
-### 请求下载
-<img width="935" height="367" alt="image" src="https://github.com/user-attachments/assets/7e5b51fe-2b1a-4448-a2aa-2c42c1f1675a" />
-
-### 解压
-<img width="1577" height="878" alt="image" src="https://github.com/user-attachments/assets/060b822a-100d-4640-997a-cd74608b34e9" />
-
-### 创建启动脚本
-<img width="1134" height="504" alt="image" src="https://github.com/user-attachments/assets/846b3186-6094-47b3-a7d9-4d4f1d57986d" />
-
-### 创建图标 .desktop 
-<img width="1482" height="729" alt="image" src="https://github.com/user-attachments/assets/3376efd2-3222-400b-842c-57cdf1ab74ce" />
-
-## 效果展示
-### 安装：
-<img width="931" height="618" alt="image" src="https://github.com/user-attachments/assets/4ebded96-67c9-4a0f-9c21-dd4be08ee2f0" />
-
-<img width="890" height="638" alt="image" src="https://github.com/user-attachments/assets/80327a8e-b936-427e-a3ce-a84985416880" />
-
-<img width="601" height="703" alt="image" src="https://github.com/user-attachments/assets/6bd31a93-8b2b-4872-96b2-8183c326c643" />
-
 ### 卸载：
 程序正在运行，提示是否结束
-<img width="1164" height="781" alt="image" src="https://github.com/user-attachments/assets/9cb8c50b-d571-4ce7-8cf9-26bd3abf4b09" />
 
-
-## 编写参考文档
- - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
- - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
- - https://www.debian.org/doc/debian-policy/ch-controlfields.html （DEBIAN/control)
- - https://wiki.debian.org/MaintainerScripts (重复安装，正常安装，安装失败 执行流程图）
- - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
- - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
- - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
- - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html (debconf)
- - https://wiki.debian.org/debconf (debconf 介绍)
- - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
- - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
- - 
-## 其他
-### 编写原则
+## 编写原则
 #### (1)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html
 - 续行必须以空格或制表符开头
@@ -102,7 +61,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Mainta
 ❌ 不能假设：这是第一次运行或环境是干净的
 ❌ 不能重复：已经完成的操作
 
-### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
+#### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts
 丢给AI，让他理解一下：
 
@@ -114,17 +73,20 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 维护脚本不能保证有控制终端可用
 可能无法与用户进行交互
 必须设计为能在无终端环境下工作
+
 **2. 必须支持非交互式回退**
 原文："They must be able to fall back to noninteractive behavior if no controlling terminal is available."
 要求：
 脚本必须检测终端可用性
 无终端时必须自动切换到非交互模式
 不能因为无法交互而卡住或失败
+
 **3. 使用 Debconf 的例外**
 原文："Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."
 含义：
 如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况
 Debconf 会自动根据环境选择适当的行为
+
 **4. 高优先级提示的特殊处理**
 原文："For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."
 限制：
@@ -151,3 +113,17 @@ Debconf 会自动根据环境选择适当的行为
 
 #### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
+
+
+## 编写参考文档
+ - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
+ - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
+ - https://www.debian.org/doc/debian-policy/ch-controlfields.html （DEBIAN/control)
+ - https://wiki.debian.org/MaintainerScripts (重复安装，正常安装，安装失败 执行流程图）
+ - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
+ - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
+ - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
+ - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html (debconf)
+ - https://wiki.debian.org/debconf (debconf 介绍)
+ - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
+ - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
