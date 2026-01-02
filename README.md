@@ -78,29 +78,49 @@
 ## 编写参考文档
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
  - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
+ - https://www.debian.org/doc/debian-policy/ch-controlfields.html （DEBIAN/control)
  - https://wiki.debian.org/MaintainerScripts (重复安装，正常安装，安装失败 执行流程图）
  - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
  - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
  - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
  - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html (debconf)
-
-
+ - https://wiki.debian.org/debconf (debconf 介绍)
+ - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
+ - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
+ - 
 ## 其他
 ### 编写原则
+#### (1)、DEBIAN/control 文件
+- https://www.debian.org/doc/debian-policy/ch-controlfields.html
+- 好多
+- 续行必须以空格或制表符开头
+<img width="1197" height="509" alt="image" src="https://github.com/user-attachments/assets/ff686210-2e70-4e0b-aea2-3b248e9f2f65" />
+- 空行看着应该是得用 .
+<img width="1112" height="568" alt="image" src="https://github.com/user-attachments/assets/e67a6762-f269-44ef-9f1f-36a759163fbc" />
+
+
 #### (1)、维护脚本幂等性
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency
 ✅ 成功后再运行：保持现状，不报错
 ✅ 失败后重新运行：继续完成剩余工作
 ❌ 不能假设：这是第一次运行或环境是干净的
 ❌ 不能重复：已经完成的操作
-<img width="925" height="246" alt="image" src="https://github.com/user-attachments/assets/54d55eaf-884a-48d8-9e22-e3a444294d32" />
 
 
-#### (2)、脚本应该保持安静，避免不必要的输出
+#### (2)、允许交互，但有严格条件
+> https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1
+> 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
+
+> https://wiki.debian.org/debconf
+> 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
+> 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
+
+- http://www.fifi.org/doc/debconf-doc/tutorial.html
+> 看不懂，丢给ai
+
+
+看着，感觉 defconf 
+- 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
+
+#### (3)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
-
-#### (3)、允许交互，但有严格条件
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1
-包应尽量减少需要提示的次数， 并且他们应确保用户只会被问到每一个 问一次。升级时不应再问同样的问题， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
-
-
