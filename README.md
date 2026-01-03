@@ -86,8 +86,12 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#maintainer-sc
 ❌ 不能重复：已经完成的操作<br />
 
 ### (3)、终端交互相关的
-#### 1. 尽量减少需要提示的次数， 并且他们应确保用户只会被问到每一个 问一次。
+#### 1. 脚本应该保持安静，避免不必要的输出， 升级时不应再问同样的问题， 除非用户已经移除了包的 配置。
 https://www.debian.org/doc/debian-policy/ch-binary.html#prompting-in-maintainer-scripts -> 3.9.1. Prompting in maintainer scripts<br />
+原文:
+- Packages should try to minimize the amount of prompting they need to do, and they should ensure that the user will only ever be asked each question once. This means that packages should try to use appropriate shared configuration files (such as and ), and shared debconf variables rather than each prompting for their own list of required pieces of information./etc/papersize/etc/news/server
+
+- It also means that an upgrade should not ask the same questions again, unless the user has used to remove the package’s configuration. The answers to configuration questions should be stored in an appropriate place in so that the user can modify them, and how this has been done should be documented.dpkg --purge/etc
 
 #### 2. 必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts<br />
@@ -101,16 +105,12 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 原文:
 - The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
 
-### (4)、脚本应该保持安静，避免不必要的输出
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts<br />
-原文:
-- The package installation scripts should avoid producing output which is unnecessary for the user to see and should rely on to stave off boredom on the part of a user installing many packages. This means, amongst other things, not passing the option to .dpkg--verboseupdate-alternatives
-
-### (7)、defconf 使用
+### (4)、defconf 使用相关
 #### 1. 介绍
 - https://wiki.debian.org/debconf
-> 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
-> 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
+原文翻译：
+- 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
+- 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
 
 > 看着，感觉 defconf 设置在升级的时候挺有用的，设置一个安装路径等配置，再次安装的时候，类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径。
 
