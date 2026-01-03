@@ -15,6 +15,8 @@ https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian/
 $ sudo debconf-show phpmyadmin
 ```
 
+<img width="632" height="572" alt="image" src="https://github.com/user-attachments/assets/b1421d9f-f4d3-41e2-bb7e-d2e7bea33aa0" />
+
 
 **在 Debian 和 Ubuntu 中重新配置已安装的软件包**
 如果您已经安装了一个软件包（例如 `phpmyadmin`），可以通过将软件包名称传递给 `dpkg-reconfigure` 来重新配置它：
@@ -23,9 +25,15 @@ $ sudo dpkg-reconfigure phpmyadmin
 ```
 运行上述命令后，您应该能够开始重新配置 phpmyadmin。您将被问到一系列问题，选择您想要的设置并完成该过程。
 
+<img width="852" height="572" alt="image" src="https://github.com/user-attachments/assets/b1fcead8-accc-4276-b294-d14c83e76d93" />
+
+<img width="852" height="496" alt="image" src="https://github.com/user-attachments/assets/dbeccdd4-9519-4bee-9d1c-e4f07d987a19" />
+
 
 
 当 phpmyadmin 重新配置过程完成后，您将看到有关新软件包设置的一些有用信息。
+
+<img width="732" height="154" alt="image" src="https://github.com/user-attachments/assets/0f7e2c5e-4467-4a72-aed0-0553d4f5f94b" />
 
 有一些有用的选项允许您更改其默认行为，下面解释一些实际有用的选项。
 
@@ -40,7 +48,11 @@ $ sudo dpkg-reconfigure debconf
 ```
 使用上下键选择一个选项，按 TAB 键选择 Ok 然后按 Enter。
 
-还可以根据优先级级别选择要忽略的问题。
+<img width="732" height="515" alt="image" src="https://github.com/user-attachments/assets/9730b426-508e-4ac3-b708-c12f4d261872" />
+
+还可以根据优先级级别选择要忽略的问题,如截图所示，然后按回车。
+
+<img width="732" height="515" alt="image" src="https://github.com/user-attachments/assets/cdcb93f7-ef02-47bf-88fa-49049c02c1f3" />
 
 要直接从命令行指定将显示的问题的最低优先级，请使用 `-p` 选项。
 ```bash
