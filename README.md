@@ -104,15 +104,21 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 > 看下来意思就是用 defconf  来处理交互比较好
 
 
-### (4)、尽量减少需要提示的次数
+### (4)、用 set -e 
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Introduction to package maintainer scripts<br />
+原文:
+- The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
+
+
+### (5)、尽量减少需要提示的次数
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
 > 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
 
 
-### (5)、脚本应该保持安静，避免不必要的输出
+### (6)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
 
-### (6)、defconf 使用
+### (7)、defconf 使用
 #### 1. 介绍
 - https://wiki.debian.org/debconf
 > 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
@@ -170,7 +176,9 @@ db_stop () {
 <img width="912" height="224" alt="image" src="https://github.com/user-attachments/assets/ee4a2aa2-5974-4493-a842-bf754b9d3e97" />
 
 
-#### 4. /var/cache/debconf/config.dat（回答） /var/cache/debconf/templates.dat （问题的模板定义） - 存储所有模板问题和用户回答
+#### 4.创建 debian/templates
+
+#### 5. /var/cache/debconf/config.dat（回答） /var/cache/debconf/templates.dat （问题的模板定义） - 存储所有模板问题和用户回答
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
 ```
@@ -190,6 +198,11 @@ sudo dpkg-reconfigure package-name
 # 设置 debconf 值
 # https://askubuntu.com/questions/381593/how-to-use-debcondf-show-results-with-debconf-set-selections/557837#557837
 echo "package-name question-name value" | sudo debconf-set-selections
+
+# 删除一个配置从数据库 （debconf-communicate 相关的命令仅仅用于调试，禁止使用在维护脚本中）
+https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html （命令手册）
+https://serverfault.com/questions/332459/how-do-i-delete-values-from-the-debconf-database （使用示例）
+echo PURGE | sudo debconf-communicate packagename
 ```
 
 
@@ -208,3 +221,5 @@ echo "package-name question-name value" | sudo debconf-set-selections
  - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
  - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
  - https://linux.extremeoverclocking.com/man/3/confmodule ( defconf模块的 基本的简介）
+ - https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian/ （dpkg-reconfigure 命令）
+ - https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html （debconf-communicate  命令）
