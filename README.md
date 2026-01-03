@@ -31,8 +31,29 @@
 ## (一)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
+
+```
+folded
+ The value of a folded field is a logical line that may span several lines. The lines after the first are called continuation lines and must start with a space or a tab. Whitespace, including any newlines, is not significant in the field values of folded fields. 3
+```
 - 续行必须以空格或制表符开头
 <br />
+
+但，又说不能用tab制表符，因为后果不可预测。
+https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
+```
+The lines in the extended description can have these formats:
+
+· Those starting with a single space are part of a paragraph. Successive lines of this form will be word-wrapped when displayed. The leading space will usually be stripped off. The line must contain at least one non-whitespace character.
+
+· Those starting with two or more spaces. These will be displayed verbatim. If the display cannot be panned horizontally, the displaying program will line wrap them “hard” (i.e., without taking account of word breaks). If it can they will be allowed to trail off to the right. None, one or two initial spaces may be deleted, but the number of spaces deleted from each line will be the same (so that you can have indenting work correctly, for example). The line must contain at least one non-whitespace character.
+
+· Those containing a single space followed by a single full stop character. These are rendered as blank lines. This is the only way to get a blank line. 9
+
+· Those containing a space, a full stop and some more characters. These are for future expansion. Do not use them.
+
+Do not use tab characters. Their effect is not predictable.
+```
 
 ```text
 Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
