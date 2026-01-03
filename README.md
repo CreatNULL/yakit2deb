@@ -43,6 +43,66 @@ Description: This is a single logical line that happens
 具体的字段参考：<br />
 https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-package-control-files-debian-control
 
+```text
+Package: fish
+Version: 1.4.5-1
+Architecture: amd64
+Maintainer: 姓名 <email@address>
+Section: net
+Priority: optional
+Depends: libcurl4t64 (= 8.18.0~rc3-1), libc6 (>= 2.34), zlib1g (>= 1:1.1.4)
+Homepage: https://www.baidu.com
+Description: 这是一个测试的软件包
+ 它并没有实际的的意义，取名为fish，专门用于测试 defconf配置脚本
+ .
+ Package: 
+ 参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package
+ 参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-source
+ 命名必须规范：小写字母、数字、+、-、.，至少2字符
+ .
+ Version: 版本号，有规范要求
+ 参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
+ .
+ Architecture: 一个唯一单一词用于标识 Debian 机器架构
+ 参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#architecture
+ - any 匹配所有 Debian 机器架构
+ - all 表示一个架构无关的封装。
+ .
+ Maintainer: 
+ 参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#maintainer
+ 格式: 姓名 <email@address> 格式符合 RFC822 标准
+ .
+ Sections: 
+ 参考 https://www.debian.org/doc/debian-policy/ch-archive.html#s-subsections 
+ Debian 存档维护者提供了权威的节列表，我的理解就是官方的一些自带的分类
+ .
+ priorities: 
+ 参考 https://www.debian.org/doc/debian-policy/ch-archive.html#priorities
+ 分为：
+    - required: 
+        对于系统正常运行所必需的软件包（通常这意味着 dpkg 的功能依赖于这些软件包）。
+        移除一个 required软件包可能导致你的系统完全损坏，
+        甚至可能无法使用 dpkg来恢复，因此只有在你清楚自己在做什么的情况下才这样做。
+        仅安装了 required软件包的系统至少具有足够的功能，使系统管理员能够启动系统并安装更多软件。
+    - important: 
+        重要的程序，包括那些在任何类 Unix 系统上都会期望找到的程序。
+        如果一个有经验的 Unix 用户发现某个程序缺失时可能会说"这到底是怎么回事，foo在哪里？"，
+        那么这个程序必须是一个 important软件包。其他没有它们系统就无法良好运行或使用的软件包也必须具有 important优先级。
+        这不包括 Emacs、X Window 系统、TeX 或其他大型应用程序。important软件包只是一个常见期望和必要工具的最小集合。
+    - standard: 
+        这些软件包提供了一个相当精简但不过分受限的字符模式系统。
+        如果用户没有选择其他选项，这将是默认安装的内容。它不包括许多大型应用程序。
+    - optional (默认): 
+        这是大多数归档软件包的默认优先级。
+        除非一个软件包应该在标准 Debian 系统上默认安装，否则它应该具有 optional优先级。
+        优先级为 optional的软件包可能会相互冲突
+  Depends: 依赖
+  参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package-interrelationship-fields-depends-pre-depends-recommends-suggests-breaks-conflicts-provides-replaces-enhances
+  参考: https://www.debian.org/doc/debian-policy/ch-relationships.html
+  这行结束还必须回车换行，否则打包时候报错，在字段 Description 的值中间发有 EOF 字符(缺失结尾的换行符)
+
+```
+
 ## (二)、维护脚本相关的
 ### (1)、执行先后顺序
 我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么：
