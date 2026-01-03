@@ -32,15 +32,14 @@
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
 
+- 续行必须以空格或制表符开头
 ```
 folded
  The value of a folded field is a logical line that may span several lines. The lines after the first are called continuation lines and must start with a space or a tab. Whitespace, including any newlines, is not significant in the field values of folded fields. 3
 ```
-- 续行必须以空格或制表符开头
 <br />
 
-但，又说不能用tab制表符，因为后果不可预测。
-https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
+- 但，又说不能用tab制表符，因为后果不可预测。https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
 ```
 The lines in the extended description can have these formats:
 
@@ -55,22 +54,22 @@ The lines in the extended description can have these formats:
 Do not use tab characters. Their effect is not predictable.
 ```
 
+- 段落之间用 . 来分割 （用换行 + 空格、换行 + 制表符，实测是不行的，也符合上面说的）
 ```text
 Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
 ```
-- 段落之间用 . 来分割 （用换行 + 空格、换行 + 制表符，实测是不行的，也符合上面说的）
 <br />
 
+- 文件必须用UTF-8编码
 ```text
 All control files must be encoded in UTF-8.
 ```
-- 文件必须用UTF-8编码
 <br />
 
+- 注释：用 # 开头且前置没有任何前置空格
 ```text
 Lines starting with U+0023 (), without any preceding whitespace, are comment lines that are only permitted in source package control files (). These comment lines are ignored, even between two continuation lines. They do not end logical lines.#debian/control
 ```
-- 注释：用 # 开头且前置没有任何前置空格
 <br />
 
 具体的字段参考：<br />
