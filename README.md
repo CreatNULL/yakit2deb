@@ -101,7 +101,8 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 - 但这种情况应该尽量避免<br />
 - 用户通常认为这是包的bug<br />
 
-那我就用 debconf
+> 看下来意思就是用 defconf  来处理交互比较好
+
 
 ### (4)、尽量减少需要提示的次数
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
