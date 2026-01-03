@@ -215,6 +215,159 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 原文翻译：<br />
 - 使用debconf的软件包可能会想问一些问题。这些 问题以模板形式存储在模板文件中。 和配置文件脚本一样，模板文件放在control.tar.gz部分 一个Deb。其格式类似于 Debian 控制文件;一组诗节 以空白行分隔，每节采用类似RFC822的形式
 
+#### 3. 设置支持多语言(国际化）
+参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
+AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
+
+```
+这段文档讲的是 **Debian 软件包中 `templates` 文件的本地化（翻译）方法**。让我用简单的中文解释：
+
+## 核心意思
+
+**如何在 `templates` 文件中添加多语言翻译**
+
+## 详细解释
+
+### 1. **基本翻译方法**
+```bash
+# 英文原版
+Template: foo/bar
+Type: select
+Choices: Yes, No
+Default: Yes
+Description: Do you want to proceed?
+
+# 西班牙语翻译
+Description-es: ¿Quieres continuar?
+Choices-es: Sí, No
+```
+- 添加 `-语言代码` 后缀的字段来翻译
+- 比如 `Description-es` 是西班牙语描述
+- 如果找不到对应语言的翻译，会自动用英文
+
+### 2. **需要翻译的字段**
+- **Description**（描述文字）- 最重要的
+- **Choices**（选项文字）- 对于选择/多选问题
+- 其他可翻译字段
+
+### 3. **注意事项**
+- **Choices 的顺序必须一致**：
+  ```bash
+  # 英文
+  Choices: Yes, No, Maybe
+  
+  # 中文
+  Choices-zh_CN: 是, 否, 可能
+  # ↑ 顺序必须完全一样
+  ```
+
+- **Default 字段不用翻译**：
+  ```bash
+  Default: Yes  # ← 保持英文
+  # 程序返回的答案永远是英文（如 "Yes"）
+  ```
+
+### 4. **与翻译者协作的工作流程**
+
+#### 第一步：翻译者获取翻译模板
+```bash
+# 意大利语翻译者获取模板
+debconf-getlang it templates > templates.it
+```
+
+#### 第二步：翻译
+- 翻译者编辑 `templates.it` 文件
+- 翻译所有可翻译字段
+
+#### 第三步：你（维护者）的工作
+```
+debian/
+├── templates      # 英文原版
+├── templates.it   # 意大利语翻译
+├── templates.fr   # 法语翻译
+├── templates.zh_CN # 中文翻译
+└── ...
+```
+
+#### 第四步：合并
+```bash
+# 构建时合并所有语言
+debconf-mergetemplate templates templates.* > combined-templates
+```
+
+### 5. **更新时的协作**
+
+#### 你更新了英文版
+- 只修改 `templates`（英文文件）
+- **不要动**翻译文件
+
+#### 翻译者检查更新
+```bash
+# 翻译者检查哪些需要更新
+debconf-getlang --stats templates templates.zh_CN
+# 输出：5个字符串中有3个需要更新
+```
+
+#### 翻译者合并更新
+```bash
+# 翻译者生成新版本
+debconf-getlang zh_CN templates templates.zh_CN > new.zh_CN
+```
+
+### 6. **"模糊"标记**
+当英文更新后：
+```bash
+# 在生成的翻译文件中
+Description-zh_CN-fuzzy: 原来的中文翻译
+# ↑ 有 -fuzzy 标记表示需要重新核对
+
+Description: 新的英文描述
+# ↑ 上面一行是新的英文，供参考
+```
+
+翻译者需要：
+1. 根据新的英文修改翻译
+2. 移除 `-fuzzy` 标记
+3. 发回给你新的翻译文件
+
+## 实际例子
+
+### 英文原版 `templates`
+```bash
+Template: yakit/language
+Type: select
+Choices: English, Chinese, French
+Default: English
+Description: Select your language
+ Please choose the language for the interface.
+```
+
+### 中文翻译 `templates.zh_CN`
+```bash
+Description-zh_CN: 选择您的语言
+ 请为界面选择语言。
+
+Choices-zh_CN: 英语, 中文, 法语
+```
+
+### 构建时合并
+```bash
+debconf-mergetemplate templates templates.zh_CN templates.fr > final-templates
+```
+
+## 好处
+- 维护简单：你只维护英文版
+- 协作方便：翻译者独立工作
+- 自动合并：构建时自动生成多语言文件
+- 版本控制：每个语言单独文件，方便管理
+
+这就是 Debian 官方推荐的 `templates` 文件多语言协作方式。
+```
+
+
+
+
+
 #### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
 
 ```bash
