@@ -37,7 +37,7 @@
 ```text
 Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
 ```
-- 段落之间用 . 来分割 （用换行 + 空格实测是不行的，也符合上面说的）
+- 段落之间用 . 来分割 （用换行 + 空格、换行 + 制表符，实测是不行的，也符合上面说的）
 <br />
 
 ```text
