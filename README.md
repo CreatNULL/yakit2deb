@@ -72,8 +72,6 @@ Lines starting with U+0023 (), without any preceding whitespace, are comment lin
 ```
 <br />
 
-具体的字段参考：<br />
-https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-package-control-files-debian-control
 
 一个简单的：
 ```text
@@ -88,6 +86,10 @@ Homepage: https://www.baidu.com
 Description: 这是一个测试的软件包
  它并没有实际的的意义，取名为fish，专门用于测试 defconf配置脚本
  .
+```
+
+字段描述
+```
  Package: 
  参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package
  参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-source
@@ -132,9 +134,11 @@ Description: 这是一个测试的软件包
   Depends: 依赖
   参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package-interrelationship-fields-depends-pre-depends-recommends-suggests-breaks-conflicts-provides-replaces-enhances
   参考: https://www.debian.org/doc/debian-policy/ch-relationships.html
-  这行结束还必须回车换行，否则打包时候报错，在字段 Description 的值中间发有 EOF 字符(缺失结尾的换行符)
-
 ```
+结束还必须回车换行，否则打包时候报错，在字段 Description 的值中间发有 EOF 字符(缺失结尾的换行符)
+
+详细具体的参考：<br />
+https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-package-control-files-debian-control
 
 ## (二)、维护脚本相关的
 ### (1)、执行先后顺序
