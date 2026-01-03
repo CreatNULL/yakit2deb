@@ -108,17 +108,24 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
 > 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
 
+
+### (5)、脚本应该保持安静，避免不必要的输出
+https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
+
+### (6)、defconf 使用
+#### 1. 介绍
 - https://wiki.debian.org/debconf
 > 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
 > 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
 
+#### 2. 教程/指南
 - http://www.fifi.org/doc/debconf-doc/tutorial.html
+> 好多一下子没看懂
 
 > 看着，感觉 defconf 
 > - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
-
-> 看看，有啥命令 db_set、db_input 等等
+#### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
 ```bash
 ┌──(vbgaga㉿kali)-[~]
 └─$ tail -n 35  /usr/share/debconf/confmodule
@@ -159,12 +166,32 @@ db_stop () {
 }
 ```
 
+
+<img width="912" height="224" alt="image" src="https://github.com/user-attachments/assets/ee4a2aa2-5974-4493-a842-bf754b9d3e97" />
+
+
+#### 4. /var/cache/debconf/config.dat（回答） /var/cache/debconf/templates.dat （问题的模板定义） - 存储所有模板问题和用户回答
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
-> /var/cache/debconf/config.dat - 存储所有模板问题和用户回答
 
+```
+# 查看已保存的配置
+debconf-get-selections
 
-### (5)、脚本应该保持安静，避免不必要的输出
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
+# 查看特定包的配置
+debconf-get-selections | grep openssh-server
+
+# 导出配置用于自动化部署
+debconf-get-selections > debconf-selections.txt
+
+# 重新配置软件包
+https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian/
+sudo dpkg-reconfigure package-name
+
+# 设置 debconf 值
+# https://askubuntu.com/questions/381593/how-to-use-debcondf-show-results-with-debconf-set-selections/557837#557837
+echo "package-name question-name value" | sudo debconf-set-selections
+```
+
 
 
 
