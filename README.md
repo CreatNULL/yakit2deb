@@ -163,6 +163,7 @@ db_stop () {
 ### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
 
+/var/cache/debconf/config.dat- 存储所有模板问题和用户回答
 
 ## 编写参考文档
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
