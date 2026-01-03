@@ -221,7 +221,7 @@ AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%
 
 **如何在 `templates` 文件中添加多语言翻译**
 
-1. **基本翻译方法**
+①. **基本翻译方法**
 ```bash
 # 英文原版
 Template: foo/bar
@@ -238,12 +238,12 @@ Choices-es: Sí, No
 - 比如 `Description-es` 是西班牙语描述
 - 如果找不到对应语言的翻译，会自动用英文
 
-2. **需要翻译的字段**
+②. **需要翻译的字段**
 - **Description**（描述文字）- 最重要的
 - **Choices**（选项文字）- 对于选择/多选问题
 - 其他可翻译字段
 
-3. **注意事项**
+③. **注意事项**
 - **Choices 的顺序必须一致**：
   ```bash
   # 英文
@@ -260,7 +260,7 @@ Choices-es: Sí, No
   # 程序返回的答案永远是英文（如 "Yes"）
   ```
 
-4. **与翻译者协作的工作流程**
+④. **与翻译者协作的工作流程**
 第一步：翻译者获取翻译模板
 ```bash
 # 意大利语翻译者获取模板
@@ -288,7 +288,7 @@ debian/
 debconf-mergetemplate templates templates.* > combined-templates
 ```
 
-5. **更新时的协作**
+⑤. **更新时的协作**
 你更新了英文版
 - 只修改 `templates`（英文文件）
 - **不要动**翻译文件
@@ -306,7 +306,7 @@ debconf-getlang --stats templates templates.zh_CN
 debconf-getlang zh_CN templates templates.zh_CN > new.zh_CN
 ```
 
-6. **"模糊"标记**
+⑥. **"模糊"标记**
 当英文更新后：
 ```bash
 # 在生成的翻译文件中
@@ -318,10 +318,7 @@ Description: 新的英文描述
 ```
 
 翻译者需要：
-1. 根据新的英文修改翻译
-2. 移除 `-fuzzy` 标记
-3. 发回给你新的翻译文件
-
+- 根据新的英文修改翻译 -> 移除 `-fuzzy` 标记 -> 发回给你新的翻译文件
 
 这就是 Debian 官方推荐的 `templates` 文件多语言协作方式。
 
