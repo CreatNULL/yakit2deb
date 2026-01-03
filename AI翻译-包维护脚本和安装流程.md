@@ -1,6 +1,4 @@
-好的，这是根据您的要求完成的翻译，保留了文档结构、代码块样式，并将您提到的特定章节标题和超链接文本进行了标注。
-
----
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html
 
 ## 6. 包维护脚本和安装过程
 
