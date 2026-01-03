@@ -190,21 +190,26 @@ https://serverfault.com/questions/332459/how-do-i-delete-values-from-the-debconf
 echo PURGE | sudo debconf-communicate packagename
 ```
 
+## (三)、.desktop 编写
+官方文档:  https://specifications.freedesktop.org/desktop-entry/latest/recognized-keys.html <br />
 
+
+StartupWMClass 获取：https://www.cnblogs.com/swtjavaspace/p/18188551<br />
+`xprop | grep WM_CLASS` 然后点击对应窗口，终端会显示
 
 
 ## 编写参考文档
- - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
- - https://blog.csdn.net/weixin_42267862/article/details/138808742 （deb包中preinst、postinst、prerm、postrm等脚本的执行顺序及参数）
- - https://www.debian.org/doc/debian-policy/ch-controlfields.html （DEBIAN/control)
+ - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html
+ - https://blog.csdn.net/weixin_42267862/article/details/138808742
+ - https://www.debian.org/doc/debian-policy/ch-controlfields.html
  - https://wiki.debian.org/MaintainerScripts (重复安装，正常安装，安装失败 执行流程图）
- - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf （官方文档）
+ - https://www.debian.org/doc/manuals/packaging-tutorial/packaging-tutorial.zh_CN.pdf
  - https://www.cnblogs.com/swtjavaspace/p/18188551 （.desktop 的StartupWMClass 值的获取）
  - https://geek-blogs.com/blog/linux-run-appimage/ （AppImage的解压）
- - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html (debconf)
- - https://wiki.debian.org/debconf (debconf 介绍)
- - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html (defconf 配置）
- - http://www.fifi.org/doc/debconf-doc/tutorial.html ( defconf 配置教程）
- - https://linux.extremeoverclocking.com/man/3/confmodule ( defconf模块的 基本的简介）
- - https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian/ （dpkg-reconfigure 命令）
- - https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html （debconf-communicate  命令）
+ - https://www.oryoy.com/news/ubuntu-debconf-quan-gong-lve-qing-song-jie-jue-xi-tong-pei-zhi-nan-ti.html
+ - https://wiki.debian.org/debconf
+ - https://www.oryoy.com/news/ubuntu-xin-shou-bi-kan-qing-song-zhang-wo-debconf-pei-zhi-ji-qiao-gao-bie-xi-tong-she-zhi-nan-ti.html
+ - http://www.fifi.org/doc/debconf-doc/tutorial.html
+ - https://linux.extremeoverclocking.com/man/3/confmodule
+ - https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian
+ - https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html
