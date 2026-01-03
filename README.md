@@ -113,13 +113,12 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
 > 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
 
 - http://www.fifi.org/doc/debconf-doc/tutorial.html
-> 看不懂，丢给ai
+
+> 看着，感觉 defconf 
+> - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
 
-看着，感觉 defconf 
-- 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
-
-看看，有啥命令 db_set、db_input 等等
+> 看看，有啥命令 db_set、db_input 等等
 ```bash
 ┌──(vbgaga㉿kali)-[~]
 └─$ tail -n 35  /usr/share/debconf/confmodule
