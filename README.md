@@ -1,15 +1,13 @@
-## 前言
+# 一、前言
  每次都是 AppImage，没找到 .deb 的安装包，琢磨着给他搞成.deb <br/>
  - 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage </br>
  - 进入解压后的目录（squashfs-root) AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录
  - Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
 
-## 原理：
+# 二、大概的流程：
 主要涉及 项目/DEBIAN/* 下面涉及的几个重要的脚本就是 control、preinst、postinst、prerm、postrm  ，control 是一些包的信息，preinst、postinst、prerm、postrm 四个是维护脚本，项目/DEBIAN 的同级目录下的其他文件夹，就映射Linux真实的路径
 
 <img width="230" height="366" alt="image" src="https://github.com/user-attachments/assets/9956ae3e-beeb-4c44-b62f-6032e07687b6" />
-
-编写主要涉及：
 
 #### 安装逻辑：
   1. 检测程序是否已经在运行
@@ -29,7 +27,7 @@
 对于 preinst 我就用来检查一些必要的依赖。
 ```
 
-# 二、编写原则
+# 三、编写原则
 ## (一)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
 - 续行必须以空格或制表符开头
