@@ -30,14 +30,26 @@
 # 三、编写原则
 ## (一)、DEBIAN/control 文件
 - https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
+- https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
 - 续行必须以空格或制表符开头
+<br />
+
+```text
+Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
 ```
-Description: This is a single logical line that happens
- to span multiple physical lines. The newlines are
- converted to spaces.
+- 段落之间用 . 来分割 （用换行 + 空格实测是不行的，也符合上面说的）
+<br />
+
+```text
+All control files must be encoded in UTF-8.
 ```
-- 段落之间的空行用 . 来替代
 - 文件必须用UTF-8编码
+<br />
+
+```text
+Lines starting with U+0023 (), without any preceding whitespace, are comment lines that are only permitted in source package control files (). These comment lines are ignored, even between two continuation lines. They do not end logical lines.#debian/control
+```
+- 注释：用 # 开头且前置没有任何前置空格
 <br />
 
 具体的字段参考：<br />
