@@ -109,14 +109,12 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 > 看下来意思就是用 defconf  来处理交互比较好
 
 
-### (4)、用 set -e 
+### (3)、用 set -e 
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Introduction to package maintainer scripts<br />
 原文:
 - The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
 
-
-
-### (6)、脚本应该保持安静，避免不必要的输出
+### (4)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts<br />
 原文:
 - The package installation scripts should avoid producing output which is unnecessary for the user to see and should rely on to stave off boredom on the part of a user installing many packages. This means, amongst other things, not passing the option to .dpkg--verboseupdate-alternatives
@@ -127,17 +125,15 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
 > 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
 > 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
 
-#### 2. 教程/指南
-- http://www.fifi.org/doc/debconf-doc/tutorial.html
-> 好多一下子没看懂
+> 看着，感觉 defconf 设置在升级的时候挺有用的，设置一个安装路径等配置，再次安装的时候，类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径。
 
-> 看着，感觉 defconf 
-> - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
+#### 2. template 文件的编写，主要设置交互的提示信息，以及选项，可以设置支持多语言
+格式参考: https://manpages.debian.org/jessie/debconf-doc/debconf-devel.7.en.html#THE_TEMPLATES_FILE
+> 使用debconf的软件包可能会想问一些问题。这些 问题以模板形式存储在模板文件中。 和配置文件脚本一样，模板文件放在control.tar.gz部分 一个Deb。其格式类似于 Debian 控制文件;一组诗节 以空白行分隔，每节采用类似RFC822的形式
 
 #### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
 对于这些命令的解释：
 - https://manpages.debian.org/jessie/debconf-doc/debconf-devel.7.en.html#THE_DEBCONF_PROTOCOL 文档中有详细描述 
-
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -179,13 +175,10 @@ db_stop () {
 }
 ```
 
-
 <img width="912" height="224" alt="image" src="https://github.com/user-attachments/assets/ee4a2aa2-5974-4493-a842-bf754b9d3e97" />
 
 
-#### 4.创建 debian/templates
-
-#### 5. /var/cache/debconf/config.dat（回答） /var/cache/debconf/templates.dat （问题的模板定义） - 存储所有模板问题和用户回答
+#### 4. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
 ```
