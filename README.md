@@ -9,7 +9,56 @@
 
 <img width="230" height="366" alt="image" src="https://github.com/user-attachments/assets/9956ae3e-beeb-4c44-b62f-6032e07687b6" />
 
-编写主要涉及：preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
+编写主要涉及：
+
+#### 安装逻辑：
+  1. 检测程序是否已经在运行
+  2. 先从官网获取最新的版本信息
+  3. 创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限
+  4. 把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
+  5. 创建启动脚本 /usr/bin/yakit，修改权限 ,
+  6. 添加 .desktop 文件，更新缓存
+
+#### 卸载
+  卸载前判断一下进程是否在运行
+ 
+```
+依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，
+因为如果没有安装，就不存在进程在运行的情况
+如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
+对于 preinst 我就用来检查一些必要的依赖。
+```
+
+# 二、编写原则
+## (一)、DEBIAN/control 文件
+- https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
+- 续行必须以空格或制表符开头
+```
+Description: This is a single logical line that happens
+ to span multiple physical lines. The newlines are
+ converted to spaces.
+```
+- 段落之间的空行用 . 来替代
+- 文件必须用UTF-8编码
+<br />
+
+具体的字段参考：<br />
+https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-package-control-files-debian-control
+
+## (二)、维护脚本相关的
+### (1)、执行先后顺序
+我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么：
+```bash
+#!/bin/bash
+set -e
+
+echo "-----------"
+echo "安装后执行的脚本 -> postinst"
+echo "\$1的值: $1"
+echo "-----------"
+```
+
+preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
 - 安装前执行的脚本 -> preinst
 - 安装后执行的脚本 -> postinst
 - 卸载前执行的脚本 -> prerm
@@ -30,86 +79,24 @@
 - 卸载后执行的脚本 -> postrm ($1的值: remove)
 
 
-#### 安装逻辑：
-  1. 检测程序是否已经在运行
-  2. 先从官网获取最新的版本信息
-  3. 创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限
-  4. 把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
-  5. 创建启动脚本 /usr/bin/yakit，修改权限 ,
-  6. 添加 .desktop 文件，更新缓存
-
-#### 卸载
-  卸载前判断一下进程是否在运行
- 
-```
-依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，
-因为如果没有安装，就不存在进程在运行的情况
-如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
-对于 preinst 我就用来检查一些必要的依赖。
-```
-
-## 编写原则
-### (1)、DEBIAN/control 文件
-- https://www.debian.org/doc/debian-policy/ch-controlfields.html
-- 续行必须以空格或制表符开头
-- 空行看着得用 .
-
-### (2)、维护脚本幂等性<br />
-https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Maintainer scripts idempotency<br />
+### (2)、维护脚本的幂等性<br />
+https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#maintainer-scripts-idempotency -> 6.2.Maintainer scripts idempotency<br />
 ✅ 成功后再运行：保持现状，不报错<br />
 ✅ 失败后重新运行：继续完成剩余工作<br />
-❌ 不能假设：这是第一次运行或环境是干净的<br />
 ❌ 不能重复：已经完成的操作<br />
 
-尽量减少需要提示的次数
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
-> 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
+### (3)、终端交互相关的
+#### 1. 尽量减少需要提示的次数， 并且他们应确保用户只会被问到每一个 问一次。
+https://www.debian.org/doc/debian-policy/ch-binary.html#prompting-in-maintainer-scripts -> 3.9.1. Prompting in maintainer scripts<br />
 
-
-### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
+#### 2. 必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts<br />
-丢给AI，让他理解一下：
-
-> 您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
-
-**1. 基本限制**<br />
 原文：
-- "Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user."<br />
-含义：<br />
-- 维护脚本不能保证有控制终端可用<br />
-- 可能无法与用户进行交互<br />
-- 必须设计为能在无终端环境下工作<br />
-<br />
+> Maintainer scripts are not guaranteed to run with a controlling terminal and may not be able to interact with the user. They must be able to fall back to noninteractive behavior if no controlling terminal is available. Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification (see Prompting in maintainer scripts) may assume that program will handle falling back to noninteractive behavior.
 
-**2. 必须支持非交互式回退**<br />
-原文：
-- "They must be able to fall back to noninteractive behavior if no controlling terminal is available."<br />
-要求：<br />
-- 脚本必须检测终端可用性<br />
-- 无终端时必须自动切换到非交互模式<br />
-- 不能因为无法交互而卡住或失败<br />
-<br />
+For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided if at all possible, since it prevents automated or unattended installs. In most cases, users will consider this to be a bug in the package.
 
-**3. 使用 Debconf 的例外**<br />
-原文：
-- "Maintainer scripts that prompt via a program conforming to the Debian Configuration Management Specification... may assume that program will handle falling back to noninteractive behavior."<br />
-含义：<br />
-- 如果使用 Debconf​ 进行提示，可以依赖它处理非交互情况<br />
-- Debconf 会自动根据环境选择适当的行为<br />
-<br />
-
-**4. 高优先级提示的特殊处理**<br />
-原文：
-- "For high-priority prompts without a reasonable default answer, maintainer scripts may abort if there is no controlling terminal. However, this situation should be avoided..."<br />
-限制：<br />
-- 只有没有合理默认值的高优先级提示才允许在无终端时中止<br/>
-- 但这种情况应该尽量避免<br />
-- 用户通常认为这是包的bug<br />
-
-> 看下来意思就是用 defconf  来处理交互比较好
-
-
-### (3)、用 set -e 
+#### 3. 用 set -e 
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Introduction to package maintainer scripts<br />
 原文:
 - The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
