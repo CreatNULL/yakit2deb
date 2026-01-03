@@ -42,8 +42,10 @@
   卸载前判断一下进程是否在运行
  
 ```
-依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，因为如果没有安装，就不存在进程在运行的情况，如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
-而 preinst 我就用来检查一些必要的依赖。
+依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，
+因为如果没有安装，就不存在进程在运行的情况
+如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
+对于 preinst 我就用来检查一些必要的依赖。
 ```
 
 ## 编写原则
@@ -63,8 +65,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Mainta
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts<br />
 丢给AI，让他理解一下：
 
-您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
-核心规定解析
+> 您提供的这段文本是 Debian Policy Manual 6.3 节，关于维护脚本的控制终端要求。这非常重要，因为它明确了维护脚本与用户交互的限制条件。
 
 **1. 基本限制**<br />
 原文：
