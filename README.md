@@ -40,13 +40,11 @@
 
 #### 卸载
   卸载前判断一下进程是否在运行
-  AppImage 
-
+ 
+```
 依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，因为如果没有安装，就不存在进程在运行的情况，如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
 而 preinst 我就用来检查一些必要的依赖。
-
-### 卸载：
-程序正在运行，提示是否结束
+```
 
 ## 编写原则
 ### (1)、DEBIAN/control 文件
@@ -160,10 +158,14 @@ db_stop () {
 }
 ```
 
+https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
+> /var/cache/debconf/config.dat - 存储所有模板问题和用户回答
+
+
 ### (5)、脚本应该保持安静，避免不必要的输出
 https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
 
-/var/cache/debconf/config.dat- 存储所有模板问题和用户回答
+
 
 ## 编写参考文档
  - https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html  （deb 制作的方法）
