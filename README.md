@@ -61,6 +61,11 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.2.Mainta
 ❌ 不能假设：这是第一次运行或环境是干净的<br />
 ❌ 不能重复：已经完成的操作<br />
 
+尽量减少需要提示的次数
+https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
+> 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
+
+
 ### (3)、必须设计为能在无终端环境下工作、必须支持非交互式回退
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Controlling terminal for maintainer scripts<br />
 丢给AI，让他理解一下：
@@ -110,13 +115,11 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 - The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
 
 
-### (5)、尽量减少需要提示的次数
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.1<br />
-> 包应尽量减少需要提示的次数， 并且他们应确保用户**只会被问到每一个 问一次。升级时不应再问同样的问题**， 除非用户已经移除了包的 配置。配置问题的答案应被存储 放置在合适的位置，方便用户修改它们， 以及这些做法都应有记录
-
 
 ### (6)、脚本应该保持安静，避免不必要的输出
-https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts
+https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3.9.Maintainer Scripts<br />
+原文:
+- The package installation scripts should avoid producing output which is unnecessary for the user to see and should rely on to stave off boredom on the part of a user installing many packages. This means, amongst other things, not passing the option to .dpkg--verboseupdate-alternatives
 
 ### (7)、defconf 使用
 #### 1. 介绍
@@ -132,6 +135,10 @@ https://www.debian.org/doc/debian-policy/ch-binary.html#s-maintscriptprompt -> 3
 > - 在升级的时候的作用类似Windows安装的时候，设置安装路径，然后后续升级安装的时候，无需再次配置路径，路径显示的就是软件安装的路径
 
 #### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
+对于这些命令的解释：
+- https://manpages.debian.org/jessie/debconf-doc/debconf-devel.7.en.html#THE_DEBCONF_PROTOCOL 文档中有详细描述 
+
+
 ```bash
 ┌──(vbgaga㉿kali)-[~]
 └─$ tail -n 35  /usr/share/debconf/confmodule
