@@ -1,3 +1,6 @@
+https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html
+---
+
 根据文档，`debconf-communicate` 是一个用于与 Debian 的配置管理系统 **debconf** 进行实时命令行交互的工具。以下是其主要信息总结：
 
 **核心功能**
