@@ -386,7 +386,7 @@ echo PURGE | sudo debconf-communicate packagename
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
 
-作为开发者，如果熟悉多国语言，可以这样：
+作为开发者，如果熟悉多国语言，可以这样编写：
 ```
 Template: fishf/install_dir
 Type: string
@@ -394,18 +394,17 @@ Default: "/usr/share/fishf"
 Description: Please enter the installation path
 Description-zh_CN: 请输入安装路径
 ```
-
-
-当使用 debconf-getlang 会提示：
+这个我没有深究，反正用不到, 下面的描述不一定正确<br />
+如果需要翻译者协助，请参相关文档，是需要用到gettext 这个东西，文档内说使用 debconf-getlang , 可以生成需要翻译的模板，实际当使用 debconf-getlang 会提示：
 ```bash
 # debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
 debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
 ```
-
+安装
 ```bash
 apt-get install po-debconf
 ```
-
+命令
 ```bash
 ┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
 └─# po2debconf 
@@ -424,9 +423,13 @@ Options:
        --podir=DIR        specify PO output directory
                           (Default: <master directory>/po)
 ```
-
-生成 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
+先得在 DEBIAN/po 文件，然后创建 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
 参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
+
+而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言
+参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html
+
+如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看模板更新的地方，然后变更，最后重新合并
 
 
 ## (三)、.desktop 编写
