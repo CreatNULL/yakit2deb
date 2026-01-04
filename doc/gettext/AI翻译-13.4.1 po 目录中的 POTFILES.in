@@ -1,0 +1,25 @@
+https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
+
+---
+## 13.4.1 po/ 目录中的 POTFILES.in
+
+`po/` 目录应该包含一个名为 `POTFILES.in` 的文件。这个文件告知在所有的程序源代码中，哪些文件包含需要翻译的标记字符串。以下是这样一个文件的示例：
+
+```makefile
+# 包含可翻译字符串的源文件列表。
+# Copyright (C) 1995 Free Software Foundation, Inc.
+
+# 公共库文件
+lib/error.c
+lib/getopt.c
+lib/xmalloc.c
+
+# 软件包源文件
+src/gettext.c
+src/msgfmt.c
+src/xgettext.c
+```
+
+以井号（#）开头的注释和空行会被忽略。所有其他行列出了那些包含标记为需要翻译的字符串的源文件（参见"标记在源代码中的出现方式"），使用相对于整个发行版顶级目录的表示法，而不是相对于 `POTFILES.in` 文件自身的位置。
+
+当 C 文件是由工具（如 flex 或 bison）自动生成，而该工具本身不引入可翻译字符串时，建议在 `po/POTFILES.in` 中列出真实的源文件（对于 flex 生成的文件，以 `.l` 结尾；对于 bison 生成的文件，以 `.y` 结尾），而不是生成的 C 文件。
