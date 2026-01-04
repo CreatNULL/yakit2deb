@@ -260,67 +260,38 @@ Choices-es: Sí, No
   # 程序返回的答案永远是英文（如 "Yes"）
   ```
 
-④. **与翻译者协作的工作流程**
-第一步：翻译者获取翻译模板
+
+当使用 debconf-getlang 会提示：
 ```bash
-# 意大利语翻译者获取模板
-debconf-getlang it templates > templates.it
+# debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
+debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
 ```
 
-第二步：翻译
-- 翻译者编辑 `templates.it` 文件
-- 翻译所有可翻译字段
-
-
-第三步：你（维护者）的工作
-```
-debian/
-├── templates      # 英文原版
-├── templates.it   # 意大利语翻译
-├── templates.fr   # 法语翻译
-├── templates.zh_CN # 中文翻译
-└── ...
-```
-
-第四步：合并
 ```bash
-# 构建时合并所有语言
-debconf-mergetemplate templates templates.* > combined-templates
+apt-get install po-debconf
 ```
 
-⑤. **更新时的协作**
-你更新了英文版
-- 只修改 `templates`（英文文件）
-- **不要动**翻译文件
-
-翻译者检查更新
 ```bash
-# 翻译者检查哪些需要更新
-debconf-getlang --stats templates templates.zh_CN
-# 输出：5个字符串中有3个需要更新
+┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
+└─# po2debconf 
+Usage: po2debconf [options] master
+Options:
+  -h,  --help             display this help message
+  -v,  --verbose          enable verbose mode
+  -o,  --output=FILE      specify output file (Default: stdout)
+  -e,  --encoding=STRING  convert encoding, STRING is chosen between
+                        po: no conversion
+                      utf8: convert to UTF-8
+                   popular: change encoding according to file map found
+                            in PODEBCONF_ENCODINGS environment variable
+                            (Default, map is /usr/share/po-debconf/encodings)
+               traditional: obsolete, replaced by popular
+       --podir=DIR        specify PO output directory
+                          (Default: <master directory>/po)
 ```
 
-翻译者合并更新
-```bash
-# 翻译者生成新版本
-debconf-getlang zh_CN templates templates.zh_CN > new.zh_CN
-```
-
-⑥. **"模糊"标记**
-当英文更新后：
-```bash
-# 在生成的翻译文件中
-Description-zh_CN-fuzzy: 原来的中文翻译
-# ↑ 有 -fuzzy 标记表示需要重新核对
-
-Description: 新的英文描述
-# ↑ 上面一行是新的英文，供参考
-```
-
-翻译者需要：
-- 根据新的英文修改翻译 -> 移除 `-fuzzy` 标记 -> 发回给你新的翻译文件
-
-这就是 Debian 官方推荐的 `templates` 文件多语言协作方式。
+生成 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
+参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
 
 
 #### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
