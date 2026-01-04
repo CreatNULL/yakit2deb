@@ -240,7 +240,57 @@ The first thing to do is look at your postinst, plus any program your postinst c
 Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
 ```
 
-#### 5. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
+#### 5. 如果你的问题不显示，那么你得先看看自己的配置
+这里可以看到我展示的级别为：debconf/priority: critical
+
+```
+┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
+└─# debconf-show debconf
+  debconf-apt-progress/title:
+  debconf-apt-progress/info:
+  debconf-apt-progress/preparing:
+* debconf/frontend: Dialog
+  debconf-apt-progress/media-change:
+* debconf/priority: critical
+```
+所以如果我希望我的问题，会被展示那级别要 >= critical 
+db_input critical xxx/xxxx || true
+
+
+从未设置过的情况下：
+```bash
+┌──(root㉿DESKTOP-865OAE3)-[/usr/share/doc/openssl]
+└─# debconf-show debconf
+  debconf-apt-progress/info:
+  debconf/priority: high
+  debconf/frontend: Dialog
+  debconf-apt-progress/media-change:
+  debconf-apt-progress/title:
+  debconf-apt-progress/preparing:
+```
+
+如果希望手动修改，使用命令:`dpkg-reconfigure debconf`, 这会启动一个交互的界面，让您重新配置
+<img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/a71562f1-3427-463e-b7f1-7d41d8bea28e" />
+
+重置: 
+```
+echo "RESET debconf/priority" | debconf-communicate
+echo "RESET debconf/frontend" | debconf-communicate
+```
+
+再看看效果：
+```bash
+┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
+└─# debconf-show debconf
+  debconf-apt-progress/title:
+  debconf/frontend: Dialog
+  debconf-apt-progress/media-change:
+  debconf-apt-progress/info:
+  debconf/priority: high
+  debconf-apt-progress/preparing:
+```
+
+#### 6. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -303,10 +353,10 @@ critical：没有用户干预可能会破坏系统的项目。
 Debconf 基于问题的优先级、用户是否已看过它以及正在使用的前端来决定是否实际显示该问题。如果问题不显示，debconf 以代码 30 回复。
 ```
 
-#### 6. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
+#### 7. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
-#### 7. 一些其他的相关的命令
+#### 8. 一些其他的相关的命令
 ```
 # 查看已保存的配置
 debconf-get-selections
@@ -332,7 +382,7 @@ echo PURGE | sudo debconf-communicate packagename
 ```
 
 
-#### 8. 设置支持多语言(国际化）
+#### 9. 设置支持多语言(国际化）
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
 
