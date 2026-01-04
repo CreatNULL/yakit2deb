@@ -305,7 +305,10 @@ if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
 fi
 ```
 
-#### 6. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
+#### 7. 还有一点值得关注，在编写循环的时候
+http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN217 -> Letting the User Back Up
+
+#### 8. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
 这里可以看到我展示的级别为：debconf/priority: critical
 
 ```
@@ -355,7 +358,7 @@ echo "RESET debconf/frontend" | debconf-communicate
   debconf-apt-progress/preparing:
 ```
 
-#### 7. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
+#### 9. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -418,10 +421,10 @@ critical：没有用户干预可能会破坏系统的项目。
 Debconf 基于问题的优先级、用户是否已看过它以及正在使用的前端来决定是否实际显示该问题。如果问题不显示，debconf 以代码 30 回复。
 ```
 
-#### 8. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
+#### 9. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
-#### 9. 一些其他的相关的命令
+#### 10. 一些其他的相关的命令
 ```
 # 查看已保存的配置
 debconf-get-selections
