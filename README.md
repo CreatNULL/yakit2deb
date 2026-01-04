@@ -257,6 +257,44 @@ fi
 
 set +e
 ```
+nginx的:
+```bash
+
+┌──(hajimi㉿DESKTOP-865OAE3)-[~/debian_packages/nginx/DEBIAN]
+└─$ cat postinst
+#!/bin/sh
+set -e
+
+case "$1" in
+  abort-upgrade|abort-remove|abort-deconfigure|configure)
+    ;;
+  triggered)
+    if invoke-rc.d --quiet nginx status >/dev/null; then
+      echo "Triggering nginx reload ..."
+      invoke-rc.d nginx reload || true
+    fi
+    exit 0
+    ;;
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+if invoke-rc.d --quiet nginx status >/dev/null; then
+  invoke-rc.d nginx upgrade || invoke-rc.d nginx restart
+  exit $?
+else
+  if ! invoke-rc.d nginx start; then
+    echo "Failed to start NGINX in postinst script, please check the logs" >&2
+    exit 0
+  fi
+fi
+
+
+
+exit 0
+```
 
 ### (4)、defconf 使用相关
 #### 1. 介绍
