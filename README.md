@@ -229,8 +229,18 @@ https://wiki.debian.org/debconf<br />
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
+#### 4. 如果使用 defconf ，在control 文件中得指定依赖
+http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN22<br />
+原文:
+```
+First, your package must depend on debconf (or pre-depend on it if it uses debconf in its preinst[1]). This is necessary since debconf isn't essential.
 
-#### 4. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
+The first thing to do is look at your postinst, plus any program your postinst calls (like a "packageconfig" program), plus your preinst, and even your prerm and postrm. Take note of all output they can generate and all input they prompt the user for. All this output and input must be eliminated for your package to use debconf. (Output to stderr can be left as is.)
+
+Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
+```
+
+#### 5. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -293,10 +303,10 @@ critical：没有用户干预可能会破坏系统的项目。
 Debconf 基于问题的优先级、用户是否已看过它以及正在使用的前端来决定是否实际显示该问题。如果问题不显示，debconf 以代码 30 回复。
 ```
 
-#### 5. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
+#### 6. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
-#### 6. 一些其他的相关的命令
+#### 7. 一些其他的相关的命令
 ```
 # 查看已保存的配置
 debconf-get-selections
@@ -322,7 +332,7 @@ echo PURGE | sudo debconf-communicate packagename
 ```
 
 
-#### 7. 设置支持多语言(国际化）
+#### 8. 设置支持多语言(国际化）
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
 
