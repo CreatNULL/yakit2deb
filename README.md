@@ -182,7 +182,7 @@ https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-pac
 
 ## (二)、维护脚本相关的
 ### (1)、执行先后顺序
-我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么：
+我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么，以此验证文档：https://zhuanlan.zhihu.com/p/439622402 中描述执行的先后顺序是否和我实验的一致。
 ```bash
 #!/bin/bash
 set -e
@@ -263,7 +263,7 @@ https://wiki.debian.org/debconf<br />
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
 
-作为开发者，如果熟悉多国语言，可以这样编写：
+作为开发者，如果熟悉多国语言，可以这样编写（注意，fishf 为项目名称，install_dir 这是算是给模板取个名字，用来表示设置安装路径的）：
 ```
 Template: fishf/install_dir
 Type: string
@@ -272,7 +272,7 @@ Description: Please enter the installation path
 Description-zh_CN: 请输入安装路径
 ```
 这个我没有深究，反正用不到, 下面的描述不一定正确<br />
-如果需要翻译者协助，请参相关文档，是需要用到gettext 这个东西，文档内说使用 debconf-getlang , 可以生成需要翻译的模板，实际当使用 debconf-getlang 会提示：
+如果需要翻译者协助，请参相关文档，是需要用到gettext 这个东西，文档内说使用 debconf-getlang , 生成用来翻译的模板，实际当使用 debconf-getlang 会提示：
 ```bash
 # debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
 debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
@@ -306,7 +306,7 @@ Options:
 而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言
 参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html
 
-如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看模板更新的地方，然后变更，最后重新合并
+如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看templates发生变动的地方，然后变更，最后重新合并
 
 
 #### 4. config 文件 (用来设置提问的问题）
