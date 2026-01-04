@@ -230,45 +230,7 @@ https://wiki.debian.org/debconf<br />
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
 
-#### 4. 设置支持多语言(国际化）
-参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
-AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
-
-
-当使用 debconf-getlang 会提示：
-```bash
-# debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
-debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
-```
-
-```bash
-apt-get install po-debconf
-```
-
-```bash
-┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
-└─# po2debconf 
-Usage: po2debconf [options] master
-Options:
-  -h,  --help             display this help message
-  -v,  --verbose          enable verbose mode
-  -o,  --output=FILE      specify output file (Default: stdout)
-  -e,  --encoding=STRING  convert encoding, STRING is chosen between
-                        po: no conversion
-                      utf8: convert to UTF-8
-                   popular: change encoding according to file map found
-                            in PODEBCONF_ENCODINGS environment variable
-                            (Default, map is /usr/share/po-debconf/encodings)
-               traditional: obsolete, replaced by popular
-       --podir=DIR        specify PO output directory
-                          (Default: <master directory>/po)
-```
-
-生成 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
-参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
-
-
-#### 3. 看看，有啥命令 `/usr/share/debconf/confmodule`, 看到 db_set、db_input 等等
+#### 4. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -312,6 +274,17 @@ db_stop () {
 对于这些命令的详细解释：<br />
 - https://manpages.debian.org/jessie/debconf-doc/debconf-devel.7.en.html#THE_DEBCONF_PROTOCOL 文档中有详细描述
 
+里面 db_input 设置问题优先级：
+```
+low
+ Very trivial items that have defaults that will work in the vast majority of cases; only control freaks see these.
+medium
+ Normal items that have reasonable defaults.
+high
+ Items that don't have a reasonable default.
+critical
+ Items that will probably break the system without user intervention.
+```
 
 #### 4. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
@@ -340,6 +313,45 @@ https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html （命
 https://serverfault.com/questions/332459/how-do-i-delete-values-from-the-debconf-database （使用示例）
 echo PURGE | sudo debconf-communicate packagename
 ```
+
+
+#### 4. 设置支持多语言(国际化）
+参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
+AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
+
+
+当使用 debconf-getlang 会提示：
+```bash
+# debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
+debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
+```
+
+```bash
+apt-get install po-debconf
+```
+
+```bash
+┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
+└─# po2debconf 
+Usage: po2debconf [options] master
+Options:
+  -h,  --help             display this help message
+  -v,  --verbose          enable verbose mode
+  -o,  --output=FILE      specify output file (Default: stdout)
+  -e,  --encoding=STRING  convert encoding, STRING is chosen between
+                        po: no conversion
+                      utf8: convert to UTF-8
+                   popular: change encoding according to file map found
+                            in PODEBCONF_ENCODINGS environment variable
+                            (Default, map is /usr/share/po-debconf/encodings)
+               traditional: obsolete, replaced by popular
+       --podir=DIR        specify PO output directory
+                          (Default: <master directory>/po)
+```
+
+生成 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
+参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
+
 
 ## (三)、.desktop 编写
 官方文档:  https://specifications.freedesktop.org/desktop-entry/latest/recognized-keys.html <br />
