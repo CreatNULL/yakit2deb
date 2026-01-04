@@ -220,7 +220,57 @@ https://wiki.debian.org/debconf<br />
 原文:<br />
 - Start writing a debian/templates file. Each time you find a piece of output or a question, add it to the file as a new template. The format of this file is simple and quite similar to a Debian control file:
 
-#### 3. config 文件 (用来设置提问的问题）
+#### 3. 设置支持多语言(国际化）
+参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
+AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
+
+作为开发者，如果熟悉多国语言，可以这样编写：
+```
+Template: fishf/install_dir
+Type: string
+Default: "/usr/share/fishf"
+Description: Please enter the installation path
+Description-zh_CN: 请输入安装路径
+```
+这个我没有深究，反正用不到, 下面的描述不一定正确<br />
+如果需要翻译者协助，请参相关文档，是需要用到gettext 这个东西，文档内说使用 debconf-getlang , 可以生成需要翻译的模板，实际当使用 debconf-getlang 会提示：
+```bash
+# debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
+debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
+```
+安装
+```bash
+apt-get install po-debconf
+```
+命令
+```bash
+┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
+└─# po2debconf 
+Usage: po2debconf [options] master
+Options:
+  -h,  --help             display this help message
+  -v,  --verbose          enable verbose mode
+  -o,  --output=FILE      specify output file (Default: stdout)
+  -e,  --encoding=STRING  convert encoding, STRING is chosen between
+                        po: no conversion
+                      utf8: convert to UTF-8
+                   popular: change encoding according to file map found
+                            in PODEBCONF_ENCODINGS environment variable
+                            (Default, map is /usr/share/po-debconf/encodings)
+               traditional: obsolete, replaced by popular
+       --podir=DIR        specify PO output directory
+                          (Default: <master directory>/po)
+```
+先得在 DEBIAN/po 文件，然后创建 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
+参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
+
+而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言
+参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html
+
+如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看模板更新的地方，然后变更，最后重新合并
+
+
+#### 4. config 文件 (用来设置提问的问题）
 路径：DEBIAN/config
 提问的问题需要在config 文件中，而不是在 postinst 脚本中<br />
 
@@ -229,7 +279,7 @@ https://wiki.debian.org/debconf<br />
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
-#### 4. 如果使用 defconf ，在control 文件中得指定依赖
+#### 5. 如果使用 defconf ，在control 文件中得指定依赖
 http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN22<br />
 原文:
 ```
@@ -240,7 +290,7 @@ The first thing to do is look at your postinst, plus any program your postinst c
 Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
 ```
 
-#### 5. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
+#### 6. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
 这里可以看到我展示的级别为：debconf/priority: critical
 
 ```
@@ -290,7 +340,7 @@ echo "RESET debconf/frontend" | debconf-communicate
   debconf-apt-progress/preparing:
 ```
 
-#### 6. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
+#### 7. `/usr/share/debconf/confmodule` 模块涉及的相关命令 db_set、db_input...
 
 ```bash
 ┌──(vbgaga㉿kali)-[~]
@@ -353,10 +403,10 @@ critical：没有用户干预可能会破坏系统的项目。
 Debconf 基于问题的优先级、用户是否已看过它以及正在使用的前端来决定是否实际显示该问题。如果问题不显示，debconf 以代码 30 回复。
 ```
 
-#### 7. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
+#### 8. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
 https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-debian-package-on-debian-systems<br />
 
-#### 8. 一些其他的相关的命令
+#### 9. 一些其他的相关的命令
 ```
 # 查看已保存的配置
 debconf-get-selections
@@ -380,56 +430,6 @@ https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html （命
 https://serverfault.com/questions/332459/how-do-i-delete-values-from-the-debconf-database （使用示例）
 echo PURGE | sudo debconf-communicate packagename
 ```
-
-
-#### 9. 设置支持多语言(国际化）
-参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
-AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
-
-作为开发者，如果熟悉多国语言，可以这样编写：
-```
-Template: fishf/install_dir
-Type: string
-Default: "/usr/share/fishf"
-Description: Please enter the installation path
-Description-zh_CN: 请输入安装路径
-```
-这个我没有深究，反正用不到, 下面的描述不一定正确<br />
-如果需要翻译者协助，请参相关文档，是需要用到gettext 这个东西，文档内说使用 debconf-getlang , 可以生成需要翻译的模板，实际当使用 debconf-getlang 会提示：
-```bash
-# debconf-getlang：此实用程序已弃用；您应该切换到使用po-debconf包
-debconf-getlang: This utility is deprecated; you should switch to using the po-debconf package.
-```
-安装
-```bash
-apt-get install po-debconf
-```
-命令
-```bash
-┌──(root㉿kali)-[/home/…/generate_deb/project/fishf/DEBIAN]
-└─# po2debconf 
-Usage: po2debconf [options] master
-Options:
-  -h,  --help             display this help message
-  -v,  --verbose          enable verbose mode
-  -o,  --output=FILE      specify output file (Default: stdout)
-  -e,  --encoding=STRING  convert encoding, STRING is chosen between
-                        po: no conversion
-                      utf8: convert to UTF-8
-                   popular: change encoding according to file map found
-                            in PODEBCONF_ENCODINGS environment variable
-                            (Default, map is /usr/share/po-debconf/encodings)
-               traditional: obsolete, replaced by popular
-       --podir=DIR        specify PO output directory
-                          (Default: <master directory>/po)
-```
-先得在 DEBIAN/po 文件，然后创建 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
-参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
-
-而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言
-参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html
-
-如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看模板更新的地方，然后变更，最后重新合并
 
 
 ## (三)、.desktop 编写
