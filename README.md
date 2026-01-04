@@ -386,6 +386,15 @@ echo PURGE | sudo debconf-communicate packagename
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
 
+作为开发者，如果熟悉多国语言，可以这样：
+```
+Template: fishf/install_dir
+Type: string
+Default: "/usr/share/fishf"
+Description: Please enter the installation path
+Description-zh_CN: 请输入安装路径
+```
+
 
 当使用 debconf-getlang 会提示：
 ```bash
