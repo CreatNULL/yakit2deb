@@ -27,69 +27,56 @@
 对于 preinst 我就用来检查一些必要的依赖。
 ```
 
+# 基础的知识
+```
+# DEB包就是把文件放到根目录对应的路径里，然后再在包管理器里注册一下
+# DEB包通常遵循一定的文件结构，包括以下主要部分：
+
+控制信息		DEBIAN/control	 包含软件包的的包名、版本、架构、作者、描述等
+配置文件		DEBIAN/conffiles 软件包配置文件的路径，这些文件在软件包升级时会特别处理，以确保用户自定义的配置不会丢失
+装前脚本		DEBIAN/preinst	 在解包 data.tar.gz 之前执行的脚本
+装后脚本		DEBIAN/postinst	 在软件包安装后要执行的命令，可以用于执行清理工作、添加启动脚本等操作
+卸前脚本		DEBIAN/prerm	 卸载时，在删除 实际数据 之前运行的脚本
+卸后脚本		DEBIAN/postrm	 在软件包卸载后要执行的命令，可以用于执行卸载后的清理操作
+实际数据		usr/ 		 软件包的实际文件和目录结构，这些文件会被释放到系统根目录对应的路径里
+文档文件		usr/share/doc	 一些软件包可能包括文档文件，这些文件通常存储在该目录下
+
+# 注意：必须要有一个DEBIAN文件夹(权限755)，最精简的状态下只需要有 control 文件就可以了，其余文件可以不创建
+```
+
 # 三、编写原则
 ## (一)、DEBIAN/control 文件
-- https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
-- https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
-
-- 续行必须以空格或制表符开头
+简单示例
+参考: https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html
+原文：
 ```
-folded
- The value of a folded field is a logical line that may span several lines. The lines after the first are called continuation lines and must start with a space or a tab. Whitespace, including any newlines, is not significant in the field values of folded fields. 3
-```
-<br />
+# DEBIAN/control 文件内的属性信息必须以字母或者数字开头，最简单的模板如下：
+Package: python3.10			# 包名，缺少会报错
+Version: 3.10.9-1+leux			# 版本，缺少会报错
+Architecture: amd64			# 架构，缺少会报错
+Maintainer: leux			# 作者，缺少会警告
+Description: Python 3.10 Version	# 描述，缺少会警告
 
-- 但，又说不能用tab制表符，因为后果不可预测。https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
-```
-The lines in the extended description can have these formats:
-
-· Those starting with a single space are part of a paragraph. Successive lines of this form will be word-wrapped when displayed. The leading space will usually be stripped off. The line must contain at least one non-whitespace character.
-
-· Those starting with two or more spaces. These will be displayed verbatim. If the display cannot be panned horizontally, the displaying program will line wrap them “hard” (i.e., without taking account of word breaks). If it can they will be allowed to trail off to the right. None, one or two initial spaces may be deleted, but the number of spaces deleted from each line will be the same (so that you can have indenting work correctly, for example). The line must contain at least one non-whitespace character.
-
-· Those containing a single space followed by a single full stop character. These are rendered as blank lines. This is the only way to get a blank line. 9
-
-· Those containing a space, a full stop and some more characters. These are for future expansion. Do not use them.
-
-Do not use tab characters. Their effect is not predictable.
-```
-
-- 段落之间用 . 来分割 （用换行 + 空格、换行 + 制表符，实测是不行的，也符合上面说的）
-```text
-Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
-```
-<br />
-
-- 文件必须用UTF-8编码
-```text
-All control files must be encoded in UTF-8.
-```
-<br />
-
-- 注释：用 # 开头且前置没有任何前置空格
-```text
-Lines starting with U+0023 (), without any preceding whitespace, are comment lines that are only permitted in source package control files (). These comment lines are ignored, even between two continuation lines. They do not end logical lines.#debian/control
-```
-<br />
-
-
-一个简单的：
-```text
-Package: fish
-Version: 1.4.5-1
-Architecture: amd64
-Maintainer: 姓名 <email@address>
-Section: net
-Priority: optional
-Depends: libcurl4t64 (= 8.18.0~rc3-1), libc6 (>= 2.34), zlib1g (>= 1:1.1.4)
-Homepage: https://www.baidu.com
-Description: 这是一个测试的软件包
- 它并没有实际的的意义，取名为fish，专门用于测试 defconf配置脚本
- 结束还必须回车换行，否则打包时候报错，在字段 Description 的值中间发有 EOF 字符(缺失结尾的换行符)
-
+# DEBIAN/control 文件内的其他可用属性信息：
+Package: 				# 软件包名称
+Version: 				# 软件包版本
+Section: 				# 软件包所属的部分
+Priority: 				# 软件包的优先级
+Architecture: 				# 软件包的体系结构
+Essential: 				# 是否是必要软件包
+Depends: 				# 软件包的依赖关系
+Pre-Depends: 				# 软件包的先决依赖
+Recommends: 				# 建议安装的软件包
+Suggests: 				# 建议但非必需的软件包
+Conflicts: 				# 与其他软件包的冲突
+Provides: 				# 软件包提供的功能
+Replaces: 				# 替代其他软件包
+Maintainer: 				# 维护者的信息
+Description: 				# 软件包的简短描述
+# 软件包的详细描述（可以跨多行）
 ```
 
-字段描述
+部分字段描述
 ```
  Package: 
  参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package
@@ -136,6 +123,58 @@ Description: 这是一个测试的软件包
   参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#package-interrelationship-fields-depends-pre-depends-recommends-suggests-breaks-conflicts-provides-replaces-enhances
   参考: https://www.debian.org/doc/debian-policy/ch-relationships.html
 ```
+
+续行必须以空格或制表符开头
+参考:
+- https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files （编写control的语法）
+- https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
+原文:
+```
+folded
+ The value of a folded field is a logical line that may span several lines. The lines after the first are called continuation lines and must start with a space or a tab. Whitespace, including any newlines, is not significant in the field values of folded fields. 3
+```
+<br />
+
+但，又说不能用tab制表符，因为后果不可预测，好吧有点看不懂了，咱不用制表符就是了。
+参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#description
+原文:
+```
+The lines in the extended description can have these formats:
+
+· Those starting with a single space are part of a paragraph. Successive lines of this form will be word-wrapped when displayed. The leading space will usually be stripped off. The line must contain at least one non-whitespace character.
+
+· Those starting with two or more spaces. These will be displayed verbatim. If the display cannot be panned horizontally, the displaying program will line wrap them “hard” (i.e., without taking account of word breaks). If it can they will be allowed to trail off to the right. None, one or two initial spaces may be deleted, but the number of spaces deleted from each line will be the same (so that you can have indenting work correctly, for example). The line must contain at least one non-whitespace character.
+
+· Those containing a single space followed by a single full stop character. These are rendered as blank lines. This is the only way to get a blank line. 9
+
+· Those containing a space, a full stop and some more characters. These are for future expansion. Do not use them.
+
+Do not use tab characters. Their effect is not predictable.
+```
+
+段落之间用 . 来分割
+参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files
+原文:
+```text
+Stanza separators (empty lines), and lines consisting only of U+0020 SPACE and U+0009 TAB, are not allowed within field values or between fields. Empty lines in field values are usually escaped by representing them by a U+0020 SPACE followed by a U+002E ()..
+```
+<br />
+
+文件必须用UTF-8编码
+参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files
+原文:
+```text
+All control files must be encoded in UTF-8.
+```
+<br />
+
+注释：用 # 开头且前置没有任何前置空格
+参考: https://www.debian.org/doc/debian-policy/ch-controlfields.html#syntax-of-control-files
+原文:
+```text
+Lines starting with U+0023 (), without any preceding whitespace, are comment lines that are only permitted in source package control files (). These comment lines are ignored, even between two continuation lines. They do not end logical lines.#debian/control
+```
+<br />
 
 
 详细具体的参考：<br />
@@ -473,3 +512,4 @@ StartupWMClass 获取：https://www.cnblogs.com/swtjavaspace/p/18188551<br />
  - https://linux.extremeoverclocking.com/man/3/confmodule
  - https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian
  - https://manpages.debian.org/testing/debconf/debconf-communicate.1.en.html
+ 
