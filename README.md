@@ -221,8 +221,9 @@ https://wiki.debian.org/debconf<br />
 - Start writing a debian/templates file. Each time you find a piece of output or a question, add it to the file as a new template. The format of this file is simple and quite similar to a Debian control file:
 
 #### 3. config 文件 (用来设置提问的问题）
-- 路径：DEBIAN/config
-- 提问的问题需要在config 文件中，而不是在 postinst 脚本中<br />
+路径：DEBIAN/config
+提问的问题需要在config 文件中，而不是在 postinst 脚本中<br />
+
 参考自: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113<br />
 原文:<br />
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
