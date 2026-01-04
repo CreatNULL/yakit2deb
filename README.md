@@ -1,31 +1,5 @@
 # 一、前言
- 每次都是 AppImage，没找到 .deb 的安装包，琢磨着给他搞成.deb <br/>
- - 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage </br>
- - 进入解压后的目录（squashfs-root) AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录
- - Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
-
-# 二、大概的流程：
-主要涉及 项目/DEBIAN/* 下面涉及的几个重要的脚本就是 control、preinst、postinst、prerm、postrm  ，control 是一些包的信息，preinst、postinst、prerm、postrm 四个是维护脚本，项目/DEBIAN 的同级目录下的其他文件夹，就映射Linux真实的路径
-
-<img width="230" height="366" alt="image" src="https://github.com/user-attachments/assets/9956ae3e-beeb-4c44-b62f-6032e07687b6" />
-
-#### 安装逻辑：
-  1. 检测程序是否已经在运行
-  2. 先从官网获取最新的版本信息
-  3. 创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限
-  4. 把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
-  5. 创建启动脚本 /usr/bin/yakit，修改权限 ,
-  6. 添加 .desktop 文件，更新缓存
-
-#### 卸载
-  卸载前判断一下进程是否在运行
- 
-```
-依据这个执行顺序，检测进程是否在运行，只需要在 prerm 脚本中编写，
-因为如果没有安装，就不存在进程在运行的情况
-如果已经安装，再次执行，会被判定位更新，则第一个调用的就是 prerm 脚本
-对于 preinst 我就用来检查一些必要的依赖。
-```
+一些工具，例如cs之类的，有时候换个电脑，换个服务器，分享给朋友，还得配置权限，卸载的时候还得回忆一下自己装哪里了，找的都是破解版，又没有.deb 安装包，迁移卸载麻烦哦。要是有deb多好，哈基咪~
 
 # 基础的知识
 参考: https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html
