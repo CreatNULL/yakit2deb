@@ -5,9 +5,8 @@ Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载
 
 ## 安装逻辑：
 - 升级安装的话，检测程序是否已经在运行
-- 安装前脚本检测 命令 wget 命令是否以及安装下载（用来下载最新的yakit)
-- 从官网获取最新的版本信息
-- 创建安装目录 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限
+- 安装前脚本检测 命令 wget 命令是否以及安装下载（用来下载yakit)
+- 创建提示指定解压目录，设置默认 /usr/share/yakit/, 然后下载输出到目录，赋予执行权限
 - 把 AppImage 解压，修改权限让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
 - 创建启动脚本 /usr/bin/yakit，修改权限 ,
 - 添加 .desktop 文件，更新缓存
