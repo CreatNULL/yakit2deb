@@ -216,11 +216,14 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 - 使用debconf的软件包可能会想问一些问题。这些 问题以模板形式存储在模板文件中。 和配置文件脚本一样，模板文件放在control.tar.gz部分 一个Deb。其格式类似于 Debian 控制文件;一组诗节 以空白行分隔，每节采用类似RFC822的形式
 
 - 文件路径 DEBAIN/templates
+参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN34<br />
+原文:<br />
+- Start writing a debian/templates file. Each time you find a piece of output or a question, add it to the file as a new template. The format of this file is simple and quite similar to a Debian control file:
 
 #### 3. config 文件
 - 提问的问题需要在config 文件中，而不是在 postinst 脚本中
-参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113
-原文:
+参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113<br />
+原文:<br />
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
