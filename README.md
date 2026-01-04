@@ -215,50 +215,20 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 原文翻译：<br />
 - 使用debconf的软件包可能会想问一些问题。这些 问题以模板形式存储在模板文件中。 和配置文件脚本一样，模板文件放在control.tar.gz部分 一个Deb。其格式类似于 Debian 控制文件;一组诗节 以空白行分隔，每节采用类似RFC822的形式
 
-#### 3. 设置支持多语言(国际化）
+- 文件路径 DEBAIN/templates
+
+#### 3. config 文件
+- 提问的问题需要在config 文件中，而不是在 postinst 脚本中
+参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113
+原文:
+- Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
+  - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
+ 
+
+
+#### 4. 设置支持多语言(国际化）
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
-
-**如何在 `templates` 文件中添加多语言翻译**
-
-①. **基本翻译方法**
-```bash
-# 英文原版
-Template: foo/bar
-Type: select
-Choices: Yes, No
-Default: Yes
-Description: Do you want to proceed?
-
-# 西班牙语翻译
-Description-es: ¿Quieres continuar?
-Choices-es: Sí, No
-```
-- 添加 `-语言代码` 后缀的字段来翻译
-- 比如 `Description-es` 是西班牙语描述
-- 如果找不到对应语言的翻译，会自动用英文
-
-②. **需要翻译的字段**
-- **Description**（描述文字）- 最重要的
-- **Choices**（选项文字）- 对于选择/多选问题
-- 其他可翻译字段
-
-③. **注意事项**
-- **Choices 的顺序必须一致**：
-  ```bash
-  # 英文
-  Choices: Yes, No, Maybe
-  
-  # 中文
-  Choices-zh_CN: 是, 否, 可能
-  # ↑ 顺序必须完全一样
-  ```
-
-- **Default 字段不用翻译**：
-  ```bash
-  Default: Yes  # ← 保持英文
-  # 程序返回的答案永远是英文（如 "Yes"）
-  ```
 
 
 当使用 debconf-getlang 会提示：
