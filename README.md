@@ -279,7 +279,7 @@ Options:
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
-#### 5. 如果使用 defconf ，在control 文件中得指定依赖
+#### 5. 如果使用 debconf ，在control 文件中得指定依赖（Depands）条件： debconf (>= 0.2.17)
 http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN22<br />
 原文:
 ```
@@ -288,6 +288,21 @@ First, your package must depend on debconf (or pre-depend on it if it uses debco
 The first thing to do is look at your postinst, plus any program your postinst calls (like a "packageconfig" program), plus your preinst, and even your prerm and postrm. Take note of all output they can generate and all input they prompt the user for. All this output and input must be eliminated for your package to use debconf. (Output to stderr can be left as is.)
 
 Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
+```
+
+#### 6. 如果使用了 debconf 在卸载指定 purge 也就是 -P 的时候得清理保存的问题模板和问题的答案，咱需要修改 postrm 维护脚本
+参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN158 <br />
+原文: <br />
+```
+There is one other alteration you need to make to the postrm script. When your package is purged, it should get rid of all the questions and templates it was using in the database. Accomplishing this is simple; use the "purge" command (make sure you don't fail if debconf has already been removed, though):
+
+
+if [ "$1" = "purge" -a -e /usr/share/debconf/confmodule ]; then
+    # Source debconf library.
+    . /usr/share/debconf/confmodule
+    # Remove my changes to the db.
+    db_purge
+fi
 ```
 
 #### 6. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
