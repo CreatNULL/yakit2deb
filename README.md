@@ -240,7 +240,7 @@ The first thing to do is look at your postinst, plus any program your postinst c
 Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
 ```
 
-#### 5. 如果你的问题不显示，那么你得先看看自己的配置
+#### 5. 如果你设置的问题不显示，首先确保不是升级安装操作，或者同一个包安装第二次，其次得先看看自己的 debconf/priority 的配置
 这里可以看到我展示的级别为：debconf/priority: critical
 
 ```
