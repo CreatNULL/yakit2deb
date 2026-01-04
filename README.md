@@ -1,7 +1,5 @@
 # 一、前言
-一些工具，例如cs之类的，有时候换个电脑，换个服务器，分享给朋友，还得配置权限，卸载的时候还得回忆一下自己装哪里了，找的都是破解版，又没有.deb 安装包，迁移卸载麻烦哦。要是有deb多好，哈基咪~
-
-# 基础的知识
+ 如cs之类的，有时候换个电脑，换个服务器，分享给朋友，还得配置权限，卸载的时候还得回忆一下自己装哪里了，找的都是破解版，又没有.deb 安装包，迁移卸载麻烦哦。要是有deb多好，哈基咪~ 一、哈基咪~知识
 参考: https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html
 原文：
 ```
@@ -168,6 +166,7 @@ echo "安装后执行的脚本 -> postinst"
 echo "\$1的值: $1"
 echo "-----------"
 ```
+set +e
 
 preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
 - 安装前执行的脚本 -> preinst
@@ -215,6 +214,47 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.3 Contro
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Introduction to package maintainer scripts<br />
 原文:
 - The package management system looks at the exit status from these scripts. It is important that they exit with a non-zero status if there is an error, so that the package management system can stop its processing. For shell scripts this means that you almost always need to use (this is usually true when writing shell scripts, in fact). It is also important, of course, that they exit with a zero status if everything went well.set -e
+
+参考mysql的
+```bash
+┌──(root㉿DESKTOP-865OAE3)-[/mnt/c/Users/hajimi/Downloads/mysql_extract_dir/DEBIAN]
+└─# cat postrm
+#!/bin/bash
+
+# Copyright (c) 2014, 2023, Oracle and/or its affiliates. All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+set -e
+
+if [ -f "/etc/apt/sources.list.d/mysql.list" ];
+then
+        rm -f /etc/apt/sources.list.d/mysql.list*
+fi
+
+if [ -f "/usr/share/keyrings/mysql-apt-config.gpg" ];
+then
+    rm -f /usr/share/keyrings/mysql-apt-config.gpg
+fi
+
+if [ "$1" = purge ] && [ -e /usr/share/debconf/confmodule ]; then
+        . /usr/share/debconf/confmodule
+        db_purge
+fi
+
+set +e
+```
 
 ### (4)、defconf 使用相关
 #### 1. 介绍
@@ -294,7 +334,7 @@ Options:
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
-#### 5. 如果使用 debconf ，在control 文件中得指定依赖（Depands）条件： debconf (>= 0.2.17)
+#### 5. 如果使用 debconf ，在control 文件中得指定依赖Depands条件： debconf (>= 0.2.17)
 http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN22<br />
 原文:
 ```
@@ -303,6 +343,53 @@ First, your package must depend on debconf (or pre-depend on it if it uses debco
 The first thing to do is look at your postinst, plus any program your postinst calls (like a "packageconfig" program), plus your preinst, and even your prerm and postrm. Take note of all output they can generate and all input they prompt the user for. All this output and input must be eliminated for your package to use debconf. (Output to stderr can be left as is.)
 
 Note: If your preinst uses debconf, you must make your package Pre-Depend on debconf (>= 0.2.17).
+```
+
+参考mysql的:
+```
+┌──(root㉿DESKTOP-865OAE3)-[/mnt/c/Users/hajimi/Downloads/mysql_extract_dir/DEBIAN]
+└─# cat control
+Package: mysql-apt-config
+Version: 0.8.36-1
+Section: database
+Priority: optional
+Architecture: all
+Pre-depends: debconf (>= 0.2.17), dpkg (>= 1.15), lsb-release, wget, bash (>= 4.0), gnupg
+Homepage: http://dev.mysql.com/
+Maintainer: MySQL Release Engineering <mysql-build@oss.oracle.com>
+Installed-Size: 35
+Description: Auto configuration for MySQL APT Repo.
+ MySQL is a fast, stable and true multi-user, multi-threaded SQL database
+ server. SQL (Structured Query Language) is the most popular database query
+ language in the world. The main goals of MySQL are speed, robustness and
+ ease of use.
+```
+vim 没有使用, 就无需指定
+```
+┌──(vbgaga㉿DESKTOP-865OAE3)-[/mnt/c/Users/hajimi/Downloads/vim_extract_DEBIAN]
+└─$ cat control
+Package: vim
+Version: 2:9.1.1882-1
+Architecture: amd64
+Maintainer: Debian Vim Maintainers <team+vim@tracker.debian.org>
+Installed-Size: 4077
+Depends: vim-common (= 2:9.1.1882-1), vim-runtime (= 2:9.1.1882-1), libacl1 (>= 2.2.23), libc6 (>= 2.38), libgpm2 (>= 1.20.7), libselinux1 (>= 3.1~), libsodium23 (>= 1.0.14), libtinfo6 (>= 6)
+Suggests: ctags, vim-doc, vim-scripts
+Provides: editor
+Section: editors
+Priority: optional
+Homepage: https://www.vim.org/
+Description: Vi IMproved - enhanced vi editor
+ Vim is an almost compatible version of the UNIX editor Vi.
+ .
+ Many new features have been added: multi level undo, syntax
+ highlighting, command line history, on-line help, filename
+ completion, block operations, folding, Unicode support, etc.
+ .
+ This package contains a version of vim compiled with a rather
+ standard set of features.  This package does not provide a GUI
+ version of Vim.  See the other vim-* packages if you need more
+ (or less).
 ```
 
 #### 6. 如果使用了 debconf 在卸载指定 purge 也就是 -P 的时候得清理保存的问题模板和问题的答案，咱需要修改 postrm 维护脚本
