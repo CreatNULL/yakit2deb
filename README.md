@@ -284,6 +284,13 @@ high
  Items that don't have a reasonable default.
 critical
  Items that will probably break the system without user intervention.
+
+翻译:
+low：非常琐碎的项目，其默认值在绝大多数情况下都有效；只有控制狂才能看到这些。
+medium：具有合理默认值的普通项目。
+high：没有合理默认值的项目。
+critical：没有用户干预可能会破坏系统的项目。
+Debconf 基于问题的优先级、用户是否已看过它以及正在使用的前端来决定是否实际显示该问题。如果问题不显示，debconf 以代码 30 回复。
 ```
 
 #### 4. /var/cache/debconf/config.dat（存储所的回答） /var/cache/debconf/templates.dat （存储问题的模板定义）
