@@ -203,7 +203,7 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 
 ### (4)、defconf 使用相关
 #### 1. 介绍
-- https://wiki.debian.org/debconf<br />
+https://wiki.debian.org/debconf<br />
 原文翻译：<br />
 - 简单来说，debconf 就是“正确安装 Shield Wizards Wizards”，这是基于 Debian 发行版的主要优势之一。
 - 当你安装或升级包时，debconf会一次性问所有配置问题，并将答案存储在数据库中。然后当每个包安装自己时，脚本会利用数据库中的偏好设置。这样可以省去手动编辑配置文件的麻烦，也省去了等待每个软件包安装完再回答某些配置问题的麻烦。
@@ -215,19 +215,19 @@ https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html -> 6.1. Intro
 原文翻译：<br />
 - 使用debconf的软件包可能会想问一些问题。这些 问题以模板形式存储在模板文件中。 和配置文件脚本一样，模板文件放在control.tar.gz部分 一个Deb。其格式类似于 Debian 控制文件;一组诗节 以空白行分隔，每节采用类似RFC822的形式
 
-- 文件路径 DEBAIN/templates
-参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN34<br />
+文件路径 DEBIAN/templates<br />
+参考自: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN34<br />
 原文:<br />
 - Start writing a debian/templates file. Each time you find a piece of output or a question, add it to the file as a new template. The format of this file is simple and quite similar to a Debian control file:
 
 #### 3. config 文件 (用来设置提问的问题）
-- 提问的问题需要在config 文件中，而不是在 postinst 脚本中
-参考: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113<br />
+- 路径：DEBIAN/config
+- 提问的问题需要在config 文件中，而不是在 postinst 脚本中<br />
+参考自: http://www.fifi.org/doc/debconf-doc/tutorial.html#AEN113<br />
 原文:<br />
 - Next, decide what order the questions should be asked and the messages to the user should be displayed, figure out what tests you'll make before asking the questions and displaying the messages, and start writing a debian/config file to ask and display them.
   - Note: These questions are asked by a separate config script, not by the postinst, so the package can be configured before it is installed, or reconfigured after it is installed. Do not make your postinst use debconf to ask questions.
  
-
 
 #### 4. 设置支持多语言(国际化）
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
