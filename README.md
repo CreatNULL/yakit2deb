@@ -191,6 +191,30 @@ preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
 - 卸载后执行的脚本 -> postrm ($1的值: remove)
 
 
+这是从同一个包多次安装的角度来看，实际上还要复杂一点, 比如这个明显可以看到在原来的卸载脚本出现错误后，会启用新发布.deb 内的脚本去尝试卸载，具体详细流程还是得看官方的文档。
+```bash
+┌──(root㉿kali)-[/home/vbgaga/vscode-project/deb_make/project]
+└─# dpkg -i yakit.deb
+(正在读取数据库 ... 系统当前共安装有 465779 个文件和目录。)
+准备解压 yakit.deb  ...
+正在解压 yakit (1.4.5-1226) 并覆盖 (1.4.5-1226) ...
+dpkg: 警告: 旧的 yakit 软件包 post-removal 脚本 子进程返回错误状态 10
+dpkg: 现在尝试使用新软件包所带的脚本...
+dpkg: ... 它看起来没有问题
+正在设置 yakit (1.4.5-1226) ...
+Copy /tmp/yakit_install_package/Yakit-1.4.5-1226-linux-amd64.AppImage to -> /usr/share/yakit
+Extract files from AppImage.
+squashfs-root/.DirIcon
+squashfs-root/AppRun
+squashfs-root/LICENSE.electron.txt
+squashfs-root/LICENSE.md
+squashfs-root/LICENSES.chromium.html
+squashfs-root/bins
+squashfs-root/bins/database
+squashfs-root/bins/database/flag.txt
+
+```
+
 ### (2)、维护脚本的幂等性<br />
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#maintainer-scripts-idempotency -> 6.2.Maintainer scripts idempotency<br />
 ✅ 成功后再运行：保持现状，不报错<br />
