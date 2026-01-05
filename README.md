@@ -356,13 +356,14 @@ Options:
        --podir=DIR        specify PO output directory
                           (Default: <master directory>/po)
 ```
-先得在 DEBIAN/po 文件，然后创建 POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
-参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html
+先得创建  debian/po/POTFILES.in ,该文件告诉在所有程序源代码中，哪些文件有需要翻译的标记字符串 <br />
+参考: https://www.gnu.org/software/gettext/manual/html_node/po_002fPOTFILES_002ein.html <br />
 
-而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言
-参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html
+而且看着，似乎还需要创建一个文件 LINGUAS 来指他支持什么语言<br />
+参考：https://www.gnu.org/software/gettext/manual/html_node/po_002fLINGUAS.html <br />
 
-如果你的templates发生了更新，通知翻译者，然后翻译者，使用命令  debconf-getlang --stats templates templates.it 可以查看templates发生变动的地方，然后变更，最后重新合并
+还可以看看这个文档: <br />
+https://manpages.debian.org/buster/po-debconf/po-debconf.7.en.html <br />
 
 
 #### 4. config 文件 (用来设置提问的问题）
