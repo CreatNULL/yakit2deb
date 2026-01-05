@@ -412,7 +412,7 @@ Description-vi.UTF-8: Tìm thấy cấu hình đã có
  Hãy đọc trang hướng dẫn ufw(8) để tìm chi tiết về cấu hình ufw.
 ```
 
-我自己的：<br />
+我自己的 DEBIAN/templates 部分：<br />
 ```
 Template: yakit/path_empty_error
 Type: error
@@ -421,64 +421,14 @@ Description-zh_CN: 路径不能为空!!!
 ```
 <img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/056db662-f54b-4a22-ae41-8eab051c7824" />
 
-我的 DEBIAN/config
+我的 DEBIAN/config 部分代码：
 ```bash
-#!/bin/bash
-
-set -e
-
-# 导入模块
-. /usr/share/debconf/confmodule
-
-# 设置标题
-db_settitle yakit/title
-echo $1
-
-# 非交互式模式处理
-if [ "${DEBIAN_FRONTEND}" != "noninteractive" ];then
-    # 安装/手动重新配置
-    if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ];
-    then
-        while :; do
-            # 获取输入 设置级别 （high）,  让他展示出来，因为系统默认的策略就是只展示high级别的 （debconf-show debconf 查看） 
-            db_input high yakit/install_dir || true # 得使用 true，似乎，因为没输入，直接用之前存储了，所以返回 30， 正常的
-            db_go || true
-
-            # 获取用户输入
-            db_get yakit/install_dir || true
-            INSTALL_DIR="$RET"
-
-            # 验证1：不为空
-            if [ -z "$INSTALL_DIR" ]; then
-                db_input critical yakit/path_empty_error || true
-                db_go || true
-                # 重置输入框状态
-                db_fset yakit/install_dir seen false
-                continue
-            fi
-
-            # 验证2：必须是绝对路径
-            # 检查是否以 / 开头
-            if [[ "$INSTALL_DIR" != /* ]]; then
-                db_input critical yakit/path_format_error || true
-                db_go || true
-                # 重置输入框状态
-                db_fset yakit/install_dir seen false
-                continue
-            fi
-
-           # 验证3：不能是根目录
-            if [ "$INSTALL_DIR" = "/" ]; then
-                db_input critical yakit/path_root_error || true
-                db_go || true
-                db_fset yakit/install_dir seen false
-                continue
-            fi
-
-            # 所有验证通过，退出循环
-            break
-        done
-    fi
+# 验证3：不能是根目录
+if [ "$INSTALL_DIR" = "/" ]; then
+    db_input critical yakit/path_root_error || true
+    db_go || true
+    db_fset yakit/install_dir seen false
+    continue
 fi
 ```
 
