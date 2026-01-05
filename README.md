@@ -315,6 +315,103 @@ https://wiki.debian.org/debconf<br />
 原文:<br />
 - Start writing a debian/templates file. Each time you find a piece of output or a question, add it to the file as a new template. The format of this file is simple and quite similar to a Debian control file:
 
+其中type 支持多种类型，title 可以设置交互界面的标题 (没找到示例，就用我自己的好了）<br />
+```
+Template: yakit/title
+Type: title
+Description: Yakit
+```
+<img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/ae5f5c06-af7d-42a6-aecd-83b7ef0b5412" />
+
+
+
+设置error错误提示消息，可以参考 ufw 的：<br />
+```
+Template: ufw/existing_configuration
+Type: error
+Description: Existing configuration found
+ An existing configuration for ufw has been found.
+ Existing rules must be managed manually.
+ .
+ You should read the ufw(8) manpage for details about ufw configuration.
+Description-cs.UTF-8: Nalezena existující konfigurace
+ Pro ufw byla nalezena existující konfigurace. Existující pravidla musí být spravována ručně.
+ .
+ Pro podrobnosti o konfiguraci ufw si přečtěte manuálovou stránku ufw(8).
+Description-da.UTF-8: Eksisterende konfiguration fundet
+ Der er fundet en eksisterende konfiguration for ufw. Eksisterende regler skal håndteres manuelt.
+ .
+ Du bør læse manualsiden ufw(8) for detaljer om ufw-konfiguration.
+Description-de.UTF-8: Bestehende Konfiguration gefunden
+ Eine existierende Konfiguration fÃ¼r Ufw wurde gefunden. Existierende Regeln mÃ¼ssen manuell verwaltet werden.
+ .
+ Sie sollten die Handbuchseite ufw(8) fÃ¼r weitere Hinweise zur Konfiguration von Ufw lesen.
+Description-es.UTF-8: Se ha encontrado la configuración existente
+ Se ha encontrado una configuración de ufw existente. Las reglas existentes se deberán gestionar manualmente.
+ .
+ Debería leer la página del manual ufw(8) para los detalles sobre la configuración de ufw.
+Description-eu.UTF-8: Konfigurazioa aurkituta
+ Aurreko ufw konfigurazio bat aurkitu da. Dauden arauak eskuz kudeatu behar dira.
+ .
+ ufw(8) manual orria irakurri beharko zenuke ufw konfigurazio xehetasunetarako.
+Description-fi.UTF-8: Asetustiedosto löytyi
+ Järjestelmästä löytyi ufw:n asetustiedosto. Olemassa olevia sääntöjä täytyy pitää yllä käsin.
+ .
+ Lisätietoja ufw:n asetuksista löytyy man-ohjesivulta ufw(8).
+Description-fr.UTF-8: Configuration existante trouvée
+ Une configuration existante a été trouvée pour ufw. Les règles qui y sont utilisées doivent être gérées manuellement.
+ .
+ Vous devriez lire la page de manuel ufw(8) pour plus de détails sur la configuration de ufw.
+Description-gl.UTF-8: Achouse unha configuraciÃ³n xa existente
+ Atopouse unha configuraciÃ³n de ufw preexistente. As regras xa existentes deben xestionarse manualmente.
+ .
+ DeberÃ­a ler a pÃ¡xina de manual de ufw(8) para coÃ±ecer mÃ¡is detalles acerca da configuraciÃ³n de ufw.
+Description-it.UTF-8: Trovata una configurazione già esistente
+ È stata trovata una configurazione per ufw già esistente. Le regole esistenti devono essere gestite manualmente.
+ .
+ Si veda la pagina man di ufw(8) per i dettagli sulla configurazione di ufw.
+Description-ja.UTF-8: 既存の設定が見つかりました
+ ufw の既存の設定が見つかりました。既存のルールは手動で管理する必要があります。
+ .
+ ufw の設定の詳細については、ufw(8) の man ページを読んでください。
+Description-nl.UTF-8: Bestaande configuratie gevonden
+ Er is een bestaande configuratie voor ufw gevonden. De bestaande regels moeten handmatig beheerd worden.
+ .
+ Lees de man-pagina van ufw(8) voor details over de configuratie van ufw.
+Description-pl.UTF-8: Znaleziono istniejącą konfigurację
+ Znaleziono istniejącą konfigurację ufw. Konieczne jest ręczne zarządzanie istniejącymi regułami.
+ .
+ Proszę zapoznać się ze stroną man ufw(8), aby poznać szczegóły na temat konfiguracji ufw.
+Description-pt.UTF-8: Foi encontrada configuração existente
+ Foi encontrada uma configuração existente para o ufw. As regras existentes terão que ser geridas manualmente.
+ .
+ Você deverá ler o manual do ufw(8) para detalhes acerca da configuração do ufw.
+Description-pt_BR.UTF-8: Configuração existente encontrada
+ Uma configuração existente para o ufw foi encontrada. Regras existentes devem ser gerenciadas manualmente.
+ .
+ Você deveria ler a página de manual ufw(8) para detalhes sobre a configuração do ufw.
+Description-ro.UTF-8: S-a găsit o configurație existentă
+ O configurație existentă pentru «ufw» a fost găsită. Regulile existente trebuie gestionate manual.
+ .
+ Ar trebui să citiți pagina de manual ufw(8) pentru detalii despre configurarea „ufw”.
+Description-ru.UTF-8: Найдены предыдущие настройки программы
+ Найдены предыдущие настройки ufw. Существующие правила нужно изменять вручную.
+ .
+ Подробней о настройке ufw можно прочитать в справочной странице ufw(8).
+Description-sk.UTF-8: Nájdená existujúca konfigurácia
+ Našla sa existujúca konfigurácia ufw. Existujúce pravidlá je potrebné spravovať manuálne.
+ .
+ Mali by ste si prečítať podrobnosti o konfigurácii v manuálovej stránke ufw(8).
+Description-sv.UTF-8: Äldre inställningar funna
+ Inställningar för en tidigare version av ufw har hittats. Existerande regler måste hanteras manuellt.
+ .
+ Du bör läsa manualsidan ufw(8) för detaljerad information om ufws inställningar.
+Description-vi.UTF-8: Tìm thấy cấu hình đã có
+ Một cấu hình ufw đã tồn tại đã được tìm. Bạn cần tự thao tác những quy tắc đã có.
+ .
+ Hãy đọc trang hướng dẫn ufw(8) để tìm chi tiết về cấu hình ufw.
+```
+
 #### 3. 设置支持多语言(国际化）
 参考： http://www.fifi.org/doc/debconf-doc/tutorial.html <br />
 AI翻译：https://github.com/CreatNULL/yakit-deb/blob/main/debconf/AI%E7%BF%BB%E8%AF%91-Debconf%20%E7%A8%8B%E5%BA%8F%E5%91%98%E6%95%99%E7%A8%8B-debconf-doc-tutorial.md#%E6%9C%AC%E5%9C%B0%E5%8C%96%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6《br />
