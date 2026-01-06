@@ -103,7 +103,28 @@ dpkg -r yakit 或 apt-get remove yakit
 <img width="1668" height="845" alt="image" src="https://github.com/user-attachments/assets/41895ca3-22ce-4238-94bc-17286fb2277c" />
 
 #### 3. 我自己对于这两种卸载的处理的区别：
-两种卸载都会删除 $HOME/yakit-projects 和 $HOME/.config/yakit 两个目录，唯一区别就是下次安装是否还需要指定解压目录
+<span style="color: red">**两种卸载都会删除 $HOME/yakit-projects 和 $HOME/.config/yakit 两个目录，唯一区别就是下次安装是否还需要指定解压目录**</span>
+
+这是我对$HOME/yakit-projects的观察
+```
+# 项目
+# ~/ykait-project/default-yakit.db # 默认项目的数据库 (存储了一些插件信息、字典信息等)
+# yakit 文件字典存储位置
+# ～/yakit-project/payloads
+# ~/yakit-project/project/* # 其他的自己创建的项目
+
+
+# 这些应该和插件也有点关系的
+# ~/yakit-project/yakit-profile-plugin.db
+# ~/yakit-project/yakit-profile-plugin.db-shm
+# ~/yakit-project/yakit-profile-plugin.sb-wal
+
+# yaklang 脚本默认保存目录
+# ～/yakit-project/code
+
+# yakit 引擎
+# ~/yakit-project/yak-engine/* 
+```
 
 ### (3) 修改解压目录
 ```bash
