@@ -191,7 +191,7 @@ preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
 这是从同一个包多次安装的角度来看，实际上还要复杂一点<br />
 - 比如这个明显可以看到在原来的卸载脚本出现错误后，会启用新安装使用的.deb 的卸载脚本去尝试卸载
 - 具体详细流程还是得看官方的文档（https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#details-of-unpack-phase-of-installation-or-upgrade）
-- 如果又配置了 debconf ，也就是使用 DEBIAN/config， 顺序又会复杂一点，例如使用命令`dpkg-reconfigure`修改后，执行config后似乎还会再次执行安装脚本，具体顺序没研究
+- 如果又配置了 debconf ，也就是使用 DEBIAN/config， 顺序又会复杂一点，例如使用命令`dpkg-reconfigure`修改后，执行config后似乎还会再次执行安装脚本，所以维护脚本的幂等性就重要了，哈哈，具体怎么个执行顺序没研究。
 ```bash
 ┌──(root㉿kali)-[/home/vbgaga/vscode-project/deb_make/project]
 └─# dpkg -i yakit.deb
