@@ -9,6 +9,10 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 安装
 - dpkg -i yakit.deb
 
+编写的时候，尽可能的规范了，但是可能还是有不规范地方，但是我搜集不到更多的相关资料了，还有就是理解有限
+
+<img width="469" height="406" alt="image" src="https://github.com/user-attachments/assets/5cdc98ec-4eca-4c26-a057-613013cd732f" />
+
 ## 目录结构：
 ```bash
 ┌──(vbgaga㉿kali)-[~/vscode-project/deb_make/project]
@@ -87,4 +91,28 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 - 移动到新的目录
 - 弹窗确认，删除旧的空的目录（防止误删）
 
+## 效果展示
+### （1）安装
+
+<img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/21008370-ff68-4f30-a81a-00dfbdb56e18" />
+
+<img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/7ad6a859-5078-45c1-a5c4-f887588e594b" />
+
+<img width="1571" height="845" alt="image" src="https://github.com/user-attachments/assets/e06bd488-b540-418c-9584-2ae4b96e7d88" />
+### 卸载
+完全卸载，就下次的安装路径又得重新指定
+`dpkg -P yakit`
+<img width="714" height="157" alt="image" src="https://github.com/user-attachments/assets/30c49527-bf89-47e7-a714-6784119aaab0" />
+普通的
+`dpkg -r yakit 或 apt-get remove yakit`
+<img width="723" height="129" alt="image" src="https://github.com/user-attachments/assets/2a817d99-9665-469a-8ae7-7766f05561ce" />
+
+两种卸载都会删除 $HOME/yakit-projects 和 $/.config/yakit 两个目录，唯一区别就是下次安装是否还需要指定解压目录
+
+### 修改解压目录
+```
+dpkg-reconfigure yakit
+```
+
+<img width="891" height="103" alt="image" src="https://github.com/user-attachments/assets/3c11e459-ee7e-458a-85d5-07b66090b78a" />
 
