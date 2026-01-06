@@ -317,7 +317,7 @@ fi
 exit 0
 ```
 
-### (4)、defconf 使用相关 - 不要滥用它，并不是所有的需要用到它
+### (4)、defconf 使用相关 - （不要滥用它）
 #### 1. 介绍
 https://wiki.debian.org/debconf<br />
 原文翻译：<br />
