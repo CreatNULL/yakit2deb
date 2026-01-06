@@ -78,6 +78,7 @@ yakit
 ### （1）首次安装
 #### 1. 指定AppImage解压路径
 <img width="1668" height="845" alt="image" src="https://github.com/user-attachments/assets/6adfa179-5064-4563-aacd-86cc4c80b7f5" />
+
 #### 2. 图标搜索展示
 <img width="758" height="764" alt="image" src="https://github.com/user-attachments/assets/5212d009-fb1c-4403-8538-5e0a7a7ee4de" />
 
