@@ -17,7 +17,7 @@
 # 注意：必须要有一个DEBIAN文件夹(权限755)，最精简的状态下只需要有 control 文件就可以了，其余文件可以不创建
 ```
 
-# 三、编写原则
+# 三、编写
 ## (一)、DEBIAN/control 文件
 简单示例
 参考: https://leux.cn/doc/Debian%E5%88%B6%E4%BD%9CDEB%E5%8C%85%E7%9A%84%E6%96%B9%E6%B3%95.html
