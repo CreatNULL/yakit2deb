@@ -7,7 +7,7 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 修改
 - DEBIAN/control 文件中的版本信息
 - DEBIAN/postinst 中的 YAKIT_VERSION
-- 打包 `sudo dpkg-deb --root-owner-group --build yakit`
+- 打包：进入project目录，执行 `sudo dpkg-deb --root-owner-group --build yakit`
 
 如果想要自己打包其他的，例如破解版的burpsuite可以看看https://github.com/CreatNULL/yakit2deb/blob/main/doc/README.md ,反正逻辑差不多
 
