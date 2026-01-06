@@ -1,0 +1,140 @@
+#!/bin/bash
+
+set -e
+
+# 导入模块
+. /usr/share/debconf/confmodule
+
+# 设置标题
+db_settitle yakit/title
+
+check_yakit_run() {
+    # 确保 yakit 进程 已经停止了再操作
+    if [ -n "$(pgrep -x yakit 2>/dev/null)" ] || [ -n "$(pgrep -x yak 2>/dev/null)" ]; then
+        if [ "${DEBIAN_FRONTEND}" != "noninteractive" ]; then
+            # 交互式模式：询问用户是否停止
+            db_fset yakit/disable_app_exec seen false
+            db_input critical yakit/disable_app_exec || true
+            db_go || true
+
+            db_get yakit/disable_app_exec || true
+            if [ "$RET" = "true" ]; then
+                # 或者同时结束两个进程
+                pkill -x yakit || true
+                pkill -x yak || true
+                sleep 2
+            else
+                echo "Please stop yakit !"
+                exit 1
+            fi
+        else
+            # 非交互式模式：自动停止
+            echo "Stopping yakit process (non-interactive mode)..."
+            # 或者同时结束两个进程
+            pkill -x yakit || true
+            pkill -x yak || true
+            sleep 2
+        fi
+    fi
+
+}
+
+check_yakit_run
+
+# 交互式模式处理
+if [ "${DEBIAN_FRONTEND}" != "noninteractive" ];then
+    # 安装/手动重新配置
+    if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ];then
+
+        # 记录旧的解压目录
+        old_dir=""
+        if [ "$1" = "reconfigure" ]; then
+            db_get yakit/install_dir || true
+            old_dir="$RET"  # 记录一下旧的目录
+        fi
+
+        while :; do
+            # 获取输入 设置级别 （high）,  让他展示出来，因为系统默认的策略就是只展示high级别的 （debconf-show debconf 查看） 
+            db_input high yakit/install_dir || true # 得使用 true，似乎，因为没输入，直接用之前存储了，所以返回 30， 正常的
+            db_go || true
+
+            # 获取用户输入
+            db_get yakit/install_dir || true
+            INSTALL_DIR="$RET"
+
+            # 验证1：不为空
+            if [ -z "$INSTALL_DIR" ]; then
+                db_input critical yakit/path_empty_error || true
+                db_go || true
+                # 重置输入框状态
+                db_fset yakit/install_dir seen false
+                continue
+            fi
+
+            # 验证2：必须是绝对路径
+            # 检查是否以 / 开头
+            if [[ "$INSTALL_DIR" != /* ]]; then
+                db_input critical yakit/path_format_error || true
+                db_go || true
+                # 重置输入框状态
+                db_fset yakit/install_dir seen false
+                continue
+            fi
+
+           # 验证3：不能是根目录
+            if [ "$INSTALL_DIR" = "/" ]; then
+                db_input critical yakit/path_root_error || true
+                db_go || true
+                db_fset yakit/install_dir seen false
+                continue
+            fi
+
+            # 所有验证通过，退出循环
+            break
+        done
+
+        # 更新操作 -> 移动目录
+        if [ "$1" = "reconfigure" ]; then
+
+            # 确保新的目录存在
+            if [ ! -d "$INSTALL_DIR" ]; then
+                mkdir -p "$INSTALL_DIR"
+            fi
+
+            # 移动
+            mv "$old_dir/squashfs-root" "$INSTALL_DIR"
+
+            cat > /usr/bin/yakit << EOF
+#!/bin/bash
+# Yakit 启动脚本
+
+# 设置环境变量
+export APPDIR=${INSTALL_DIR}
+
+# 使用解压后的AppRun
+"${INSTALL_DIR}/squashfs-root/AppRun" --no-sandbox >/dev/null 2>&1 &
+EOF
+            chmod 755 /usr/bin/yakit
+
+            # 删除旧的文件夹
+            # 默认的文件夹，则直接删除
+            if [ "${old_dir}" = "/usr/share/yakit"]; then
+                rm -rf ${old_dir}
+            fi
+
+            # 重置确认对话框状态
+            db_fset yakit/delete_this_dir seen false
+            # 如果是用户修改过的，为了防止误删系统目录，则需要用户手动确认
+            db_subst yakit/delete_this_dir DELETE_DIR "$DELETE_DIR"
+            db_input critical yakit/delete_this_dir || true
+            if [ "$RET" = "true" ]; then
+                echo "Deleting directory: $DELETE_DIR"
+                rm -rf "$DELETE_DIR"
+                
+                # 显示删除确认信息
+                db_input critical yakit/delete_confirm || true
+                db_go || true
+            fi
+        fi
+    fi
+fi

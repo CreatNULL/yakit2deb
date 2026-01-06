@@ -1,0 +1,34 @@
+Template: yakit/install_dir
+Type: string
+Default: /usr/share/yakit
+Description: Please enter AppImage to extract output path
+Description-zh_CN: 请指定 AppImage 提取输出路径
+
+Template: yakit/title
+Type: title
+Description: Yakit
+
+Template: yakit/path_empty_error
+Type: error
+Description: The path cannot be empty!!!
+Description-zh_CN: 路径不能为空!!!
+
+Template: yakit/path_format_error
+Type: error
+Description: This is not a valid path (must be an absolute path)
+Description-zh_CN: 这不是一个有效的路径（注意：路径必须为绝对路径）
+
+Template: yakit/path_root_error
+Type: error
+Description: Cannot use root directory! Please specify a subdirectory.
+Description-zh_CN: 不能使用根目录！请指定子目录。
+
+Template: yakit/disable_app_exec
+Type: boolean
+Description: Yakit is running, Do you want stop yakit ?
+Description-zh_CN: Yakit 正在运行，是否强制停止运行？
+
+Template: yakit/delete_this_dir
+Type: boolean
+Description: Are you sure you want to delete this directory: ${DELETE_DIR}?
+Description-zh_CN: 确定删除该目录：${DELETE_DIR}?

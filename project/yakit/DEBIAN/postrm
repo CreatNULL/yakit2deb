@@ -1,0 +1,131 @@
+#!/bin/bash
+set -e
+
+# 导入模块
+. /usr/share/debconf/confmodule
+
+# 获取安装的路径
+db_get yakit/install_dir && INSTALL_DIR=$RET
+
+# 清理一些杂项
+cleanup_misce_files() {
+
+    if [ -f "/usr/bin/yakit" ]; then
+        rm -f /usr/bin/yakit
+    fi
+    
+    if [ -f "/usr/share/applications/yakit.desktop" ]; then
+        rm -f /usr/share/applications/yakit.desktop
+    fi
+
+    if [ -f "/usr/share/kali-menu/applications/yakit.desktop" ]; then
+        rm -f /usr/share/kali-menu/applications/yakit.desktop
+    fi
+    
+    find /usr/share/icons -type f -name "yakit.png" -delete 2>/dev/null || true
+
+    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database /usr/share/applications
+}
+
+# 清理配置
+clean_user_yakit_configs() {
+    # 为所有可能的主目录用户删除
+    for user_home in /home/* /root; do
+        if [ -d "$user_home/.config/yakit" ]; then
+            rm -rf "$user_home/.config/yakit"
+        fi
+    done
+}
+
+
+# 项目
+# ~/ykait-project/default-yakit.db # 默认项目的数据库 (存储了一些插件信息、字典信息等)
+# yakit 文件字典存储位置
+# ～/yakit-project/payloads
+# ~/yakit-project/project/* # 其他的自己创建的项目
+
+
+# 这些应该和插件也有点关系的
+# ~/yakit-project/yakit-profile-plugin.db
+# ~/yakit-project/yakit-profile-plugin.db-shm
+# ~/yakit-project/yakit-profile-plugin.sb-wal
+
+# yaklang 脚本默认保存目录
+# ～/yakit-project/code
+
+# yakit 引擎
+# ~/yakit-project/yak-engine/* 
+
+
+# 清理本地文件和用户数据目录，一般来说，本地文件与用户存储数据将会存储在 $HOME/yakit-projects/ 目录下。
+clean_user_yakit_projects() {
+    # 为所有可能的主目录用户删除
+    for user_home in /home/* /root; do
+        if [ -d "$user_home/yakit-projects" ]; then
+            rm -rf "$user_home/yakit-projects"
+        fi
+    done
+}
+
+check_yakit_run() {
+    # 确保 yakit 进程 已经停止了再操作
+    if [ -n "$(pgrep -x yakit 2>/dev/null)" ] || [ -n "$(pgrep -x yak 2>/dev/null)" ]; then
+        if [ "${DEBIAN_FRONTEND}" != "noninteractive" ]; then
+            # 交互式模式：询问用户是否停止
+            db_fset yakit/disable_app_exec seen false
+            db_input critical yakit/disable_app_exec || true
+            db_go || true
+            db_get yakit/disable_app_exec || true
+
+            if [ "$RET" = "true" ]; then
+                # 或者同时结束两个进程
+                pkill -x yakit || true
+                pkill -x yak || true
+                sleep 2
+            else
+                echo "Please stop yakit !"
+                exit 1
+            fi
+        else
+            # 非交互式模式：自动停止
+            echo "Stopping yakit process (non-interactive mode)..."
+            # 或者同时结束两个进程
+            pkill -x yakit || true
+            pkill -x yak || true
+            sleep 2
+        fi
+    fi
+}
+
+clean_installation_dir() {
+    rm -rf "${INSTALL_DIR}" 2>/dev/null;
+}
+
+main_remove() {
+
+    # 确保用户在手动停止yakit运行的情况下进行卸载/升级
+    # check_yakit_run
+
+    # 升级、删除、完全卸载等公众部分, 引擎似乎是默认自动删除的
+    clean_installation_dir
+
+    if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+
+        clean_user_yakit_projects
+
+        # 删除项目配置
+        clean_user_yakit_configs
+
+        # 清理掉启动图标之类的
+        cleanup_misce_files
+
+        if [ "$1" = "purge" ]; then
+            # 删除我对数据库的更改。
+            db_purge
+        fi
+    fi
+}
+
+main_remove $1
+
+exit 0

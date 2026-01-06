@@ -1,0 +1,10 @@
+Package: yakit
+Version: 1.4.5-1226
+Architecture: amd64
+Maintainer: Yaklang.io Team <xxxx@xxx.xx>
+Section: net
+Priority: optional
+Pre-depends: debconf (>= 0.2.17), dpkg (>= 1.15), lsb-release, wget
+Homepage: https://www.yaklang.com/
+Description: Cyber Security ALL-IN-ONE Platform
+ 真不知道邮箱是什么，所以 Maintainer用xxx来替代了

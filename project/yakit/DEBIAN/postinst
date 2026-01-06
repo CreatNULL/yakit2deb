@@ -1,0 +1,162 @@
+#!/bin/bash
+set -e
+
+# 导入库
+. /usr/share/debconf/confmodule
+
+# 定义变量
+db_get yakit/install_dir || true 
+INSTALL_DIR=$RET
+
+YAKIT_VERSION="1.4.5-1226"
+SQUASHFS_DIR="$INSTALL_DIR/squashfs-root" # 解压后的目录
+APPDIR="$INSTALL_DIR/squashfs-root" # yakit 启动时候需要的环境变量
+TMP_DIR="/tmp/yakit_install_package" # 临时存 AppImage 的目录
+APPIMAGE="Yakit-${YAKIT_VERSION}-linux-amd64.AppImage"
+
+# 创建桌面快捷方式
+create_desktop_entry() {
+    echo "Create yakit.desktop file."
+    mkdir -p /usr/share/applications
+    
+    # 基础桌面条目
+    local desktop_content="[Desktop Entry]
+Name=Yakit
+Encoding=UTF-8
+Exec=yakit
+Icon=yakit
+StartupNotify=false
+Terminal=false
+Type=Application
+StartupWMClass=yakit
+Comment=Cyber Security ALL-IN-ONE Platform
+Categories=Utility;
+Keywords=security;pentest;yakit"
+    
+    # 如果是Kali Linux，添加特定菜单条目
+    if [ -d "/usr/share/kali-menu/applications" ]; then
+        echo "$desktop_content" | sed 's/^Categories=.*$/Categories=03-webapp-analysis;03-06-web-application-proxies;/' > /usr/share/kali-menu/applications/yakit.desktop
+        # Kali特定的Categories
+        echo "$desktop_content" | sed 's/^Categories=.*$/Categories=03-webapp-analysis;03-06-web-application-proxies;/' > /usr/share/applications/yakit.desktop
+    else
+        # 非Kali系统使用通用Categories
+        echo "$desktop_content" | sed 's/^Categories=.*$/Categories=Utility;/' > /usr/share/applications/yakit.desktop
+    fi
+    
+    chmod 644 /usr/share/applications/yakit.desktop
+
+    # 更新缓存
+    echo "Update MIME type cache database and icon cache."
+    if command -v update-desktop-database >/dev/null 2>&1; then
+        update-desktop-database /usr/share/applications || true
+    fi
+    
+    if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+        gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor 2>/dev/null || true
+    fi
+}
+
+
+# 解压AppImage
+extract_appimage() {
+    
+    if [ ! -d "${INSTALL_DIR}" ]; then
+        mkdir -p "${INSTALL_DIR}"
+    fi
+    
+    if [ $? -ne 0 ]; then
+        echo "Error:  Failed to create decompression directory -> ${INSTALL_DIR}"
+        exit 1
+    fi
+    
+    # 复制
+    if [ ! -d "${TMP_DIR}/${APPIMAGE}" ]; then
+        echo "Copy ${TMP_DIR}/${APPIMAGE} to -> $INSTALL_DIR"
+        cp "${TMP_DIR}/${APPIMAGE}" "${INSTALL_DIR}"
+
+        if [ ! -f "${INSTALL_DIR}/${APPIMAGE}" ]; then
+            echo "Error: copy ${APPIMAGE} file failed!!!"
+            exit 1
+        fi
+
+        # 确保文件可执行
+        chmod +x "${INSTALL_DIR}/${APPIMAGE}"
+    fi
+    
+    # 提取AppImage条件，多个条件，当 squashfs-root 目录不存在 或 AppRun或yakit或chrome-sandbox 不存在判定为解压失败
+    if [ ! -d $SQUASHFS_DIR ] ;then
+        echo "Extract files from AppImage."
+        cd $INSTALL_DIR
+        "./$APPIMAGE" --appimage-extract
+    fi
+
+    echo "Modify directory permissions."
+    # 设置权限, 否则无法执行命令
+    chmod 755 $SQUASHFS_DIR
+    cd $SQUASHFS_DIR
+    # 添加权限，否则无法启动
+    chmod 755 locales report resources usr
+
+    echo "Modify chrome-sandbox permissions."
+    # 设置权限， 否则报错: squashfs-root/chrome-sandbox is owned by root and has mode 4755.
+    chown root chrome-sandbox
+    chmod 4755 chrome-sandbox
+
+    # 删除解压的AppImage
+    rm -rf "${TMP_DIR}"
+    rm -rf "${INSTALL_DIR}/${APPIMAGE}"
+}
+
+# 创建启动脚本
+create_launcher() {
+
+    if [ ! -d "/usr/bin/yakit" ]; then
+
+        echo "Generate script -> /usr/bin/yakit."
+    
+        cat > /usr/bin/yakit << EOF
+#!/bin/bash
+# Yakit 启动脚本
+
+# 设置环境变量
+export APPDIR=${APPDIR}
+
+# 使用解压后的AppRun
+"${SQUASHFS_DIR}/AppRun" --no-sandbox >/dev/null 2>&1 &
+
+EOF
+    
+        chmod 755 /usr/bin/yakit
+    fi
+}
+
+
+# 显示安装信息
+show_installation_info() {
+    echo ""
+    echo "================= Installation successful =========================="
+    echo "Version: ${YAKIT_VERSION}"
+    echo "Extract path: ${INSTALL_DIR}"
+    echo "===================================================================="
+    echo ""
+}
+
+# 主安装函数
+main_install() {
+    # 解压AppImage
+    extract_appimage
+
+    # 创建启动脚本
+    create_launcher
+
+    # 创建桌面快捷方式
+    create_desktop_entry
+    
+    # 显示安装信息
+    show_installation_info
+}
+
+# 执行主安装
+main_install
+
+exit 0
