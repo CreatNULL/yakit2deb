@@ -6,7 +6,7 @@ set -e
 
 # 定义变量
 db_get yakit/install_dir || true 
-INSTALL_DIR=$RET
+INSTALL_DIR="$RET"
 
 YAKIT_VERSION="1.4.5-1226"
 SQUASHFS_DIR="$INSTALL_DIR/squashfs-root" # 解压后的目录
@@ -57,9 +57,9 @@ Keywords=security;pentest;yakit"
 }
 
 
-# 解压AppImage
+# 复制文件 -> 解压AppImage
 extract_appimage() {
-    
+
     if [ ! -d "${INSTALL_DIR}" ]; then
         mkdir -p "${INSTALL_DIR}"
     fi
@@ -68,12 +68,14 @@ extract_appimage() {
         echo "Error:  Failed to create decompression directory -> ${INSTALL_DIR}"
         exit 1
     fi
-    
-    # 复制
-    if [ ! -d "${TMP_DIR}/${APPIMAGE}" ]; then
-        echo "Copy ${TMP_DIR}/${APPIMAGE} to -> $INSTALL_DIR"
+
+    # 复制 (如果存在，则复制过去，然后解压，如果是修改配置，那这个目录肯定不存在，最底部的命令，已经删除了这个AppImage)
+    if [ -f "${TMP_DIR}/${APPIMAGE}" ]; then
+        # 拷贝AppImage从tmp目录到安装目录
+        echo "Copy ${TMP_DIR}/${APPIMAGE} to -> ${INSTALL_DIR}"
         cp "${TMP_DIR}/${APPIMAGE}" "${INSTALL_DIR}"
 
+        # 拷贝失败？
         if [ ! -f "${INSTALL_DIR}/${APPIMAGE}" ]; then
             echo "Error: copy ${APPIMAGE} file failed!!!"
             exit 1
@@ -81,30 +83,31 @@ extract_appimage() {
 
         # 确保文件可执行
         chmod +x "${INSTALL_DIR}/${APPIMAGE}"
-    fi
-    
-    # 提取AppImage条件，多个条件，当 squashfs-root 目录不存在 或 AppRun或yakit或chrome-sandbox 不存在判定为解压失败
-    if [ ! -d $SQUASHFS_DIR ] ;then
+
+        # 进入目录，执行解压
         echo "Extract files from AppImage."
-        cd $INSTALL_DIR
-        "./$APPIMAGE" --appimage-extract
+        cd "${INSTALL_DIR}"
+        "./${APPIMAGE}" --appimage-extract
+        echo "Modify directory permissions."
+
+        # 设置权限, 否则无法执行命令
+        chmod 755 "${SQUASHFS_DIR}"
+
+        cd "${SQUASHFS_DIR}"
+        # 添加权限，否则无法启动
+        chmod 755 locales report resources usr
+
+        # 设置权限， 否则报错: squashfs-root/chrome-sandbox is owned by root and has mode 4755.
+        echo "Modify chrome-sandbox permissions."
+        chown root chrome-sandbox
+        chmod 4755 chrome-sandbox
+
+        # 删除解压的AppImage
+        # 重要，修改配置后，当前脚本会被重新执行，
+        # 此时就靠判断临时目录中的 AppImage 这个文件是否存在来判断是否为更新配置操作）
+        rm -rf "${TMP_DIR}"
+        rm -rf "${INSTALL_DIR}/${APPIMAGE}"
     fi
-
-    echo "Modify directory permissions."
-    # 设置权限, 否则无法执行命令
-    chmod 755 $SQUASHFS_DIR
-    cd $SQUASHFS_DIR
-    # 添加权限，否则无法启动
-    chmod 755 locales report resources usr
-
-    echo "Modify chrome-sandbox permissions."
-    # 设置权限， 否则报错: squashfs-root/chrome-sandbox is owned by root and has mode 4755.
-    chown root chrome-sandbox
-    chmod 4755 chrome-sandbox
-
-    # 删除解压的AppImage
-    rm -rf "${TMP_DIR}"
-    rm -rf "${INSTALL_DIR}/${APPIMAGE}"
 }
 
 # 创建启动脚本

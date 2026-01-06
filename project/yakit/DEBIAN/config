@@ -39,13 +39,14 @@ check_yakit_run() {
 
 }
 
+# 确保Yakit没有在运行
 check_yakit_run
 
 # 交互式模式处理
 if [ "${DEBIAN_FRONTEND}" != "noninteractive" ];then
     # 安装/手动重新配置
     if [ "$1" = "configure" ] || [ "$1" = "reconfigure" ];then
-
+        
         # 记录旧的解压目录
         old_dir=""
         if [ "$1" = "reconfigure" ]; then
@@ -118,7 +119,7 @@ EOF
 
             # 删除旧的文件夹
             # 默认的文件夹，则直接删除
-            if [ "${old_dir}" = "/usr/share/yakit"]; then
+            if [ "${old_dir}" = "/usr/share/yakit" ]; then
                 rm -rf ${old_dir}
             fi
 

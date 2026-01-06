@@ -98,19 +98,23 @@ check_yakit_run() {
 }
 
 clean_installation_dir() {
-    rm -rf "${INSTALL_DIR}" 2>/dev/null;
+    rm -rf "${INSTALL_DIR}"
 }
 
 main_remove() {
-
-    # 确保用户在手动停止yakit运行的情况下进行卸载/升级
-    # check_yakit_run
-
-    # 升级、删除、完全卸载等公众部分, 引擎似乎是默认自动删除的
+    # remove
+    # purge
+    # upgrade
+    # abort-upgrade
+    # failed-upgrade
+    # 升级、删除、完全卸载、协助失败，等公众部分, 引擎似乎是默认启动新的yakit后，会自动删除的。
     clean_installation_dir
 
     if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
+        # 检测，停止yakit
+        check_yakit_run # (得放这，防止在 upgrade 、abort-upgrade、failed-upgrade、的状态下再次触发，因为 config 文件已经检测)
 
+        # 清理yakit项目目录
         clean_user_yakit_projects
 
         # 删除项目配置
