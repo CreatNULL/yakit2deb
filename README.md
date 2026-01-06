@@ -111,10 +111,13 @@ dpkg-reconfigure yakit
 ```
 Yakit运行的检测<br />
 <img width="1668" height="845" alt="image" src="https://github.com/user-attachments/assets/c0d7e1aa-0f00-488b-8993-bc056b19e9dc" />
+
 指定新的目录<br />
 <img width="1668" height="845" alt="image" src="https://github.com/user-attachments/assets/cf1375de-dcbe-427d-a4fb-38f88f724302" />
+
 移动成功，原理就是如果不存在新的目录，则创建新的目录，然后移动目录，然后删除原本的目录，是如果是默认目录 /usr/share/yakit 不会提示，如果是，防止用户指定了系统等其他重要的目录，所以让用户确认一下<br />
 <img width="751" height="224" alt="image" src="https://github.com/user-attachments/assets/820d2c66-f1d2-4e6d-8c70-aa6c41773af1" />
+
 执行脚本同步更新<br />
 <img width="796" height="222" alt="image" src="https://github.com/user-attachments/assets/d9b664e2-ea1e-4c65-88da-e42566c0f304" />
 
