@@ -9,7 +9,7 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 - DEBIAN/postinst 中的 YAKIT_VERSION
 - 打包：进入project目录，执行 `sudo dpkg-deb --root-owner-group --build yakit`
 
-如果想要自己打包其他的，例如破解版的burpsuite可以看看https://github.com/CreatNULL/yakit2deb/blob/main/doc/README.md ,反正逻辑差不多
+如果想要自己打包其他的，例如尝试制作破解版的burpsuite.deb，可以看看https://github.com/CreatNULL/yakit2deb/blob/main/doc/README.md ,反正逻辑差不多吧感觉。
 
 确保以下权限（755），当然如果不修改，反正打包的时候会报错提示的，问题不大，到时候再修改就好了：
 ```
