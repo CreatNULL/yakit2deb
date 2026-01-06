@@ -1,5 +1,8 @@
 ## 前言
+我想要图标启动，本来我想着自己创建一个.desktop, 结果kali有个脚本，会自动检测是否为安装的软件，如果不是，就会清理掉你的.desktop。
+
 Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 yakit_install_package 路径
+
 修改
 - DEBIAN/control 文件中的版本信息
 - DEBIAN/postinst 中的 YAKIT_VERSION
