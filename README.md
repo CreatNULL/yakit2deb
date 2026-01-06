@@ -712,13 +712,13 @@ https://stackoverflow.com/questions/10885177/how-to-read-input-while-installing-
 #### 10. 一些其他的相关的命令
 ```
 # 查看已保存的配置
-debconf-get-selections
+debconf-get-selections （apt install debconf-utils)
 
 # 查看特定包的配置
 debconf-get-selections | grep openssh-server
 
-# 导出配置用于自动化部署
-debconf-get-selections > debconf-selections.txt
+# 这个感觉简单点哈哈
+debconf-show <package-name>
 
 # 重新配置软件包
 https://www.tecmint.com/dpkg-reconfigure-installed-package-in-ubuntu-debian/
