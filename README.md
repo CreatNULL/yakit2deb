@@ -3,9 +3,20 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 修改
 - DEBIAN/control 文件中的版本信息
 - DEBIAN/postinst 中的 YAKIT_VERSION
-- 打包 `dpkg-deb --root-owner-group --build yakit`
+- 打包 `sudo dpkg-deb --root-owner-group --build yakit`
 
 如果想要自己打包其他的，例如破解版的burpsuite可以看看https://github.com/CreatNULL/yakit2deb/blob/main/doc/README.md ,反正逻辑差不多
+
+确保以下权限（755），当然如果不修改，反正打包的时候会报错提示的，问题不大，到时候再修改就好了：
+```
+/home/createnull/vscode-project/deb_make/project/yakit/DEBIAN
+
+-rwxr-xr-x 1 createnull createnull 4499  1月 6日 16:36 config
+-rw-r--r-- 1 createnull createnull  347  1月 5日 01:48 control
+-rwxr-xr-x 1 createnull createnull 4758  1月 6日 20:28 postinst
+-rwxr-xr-x 1 createnull createnull 3832  1月 6日 20:59 postrm
+-rw-r--r-- 1 createnull createnull 1101  1月 5日 23:21 templates
+```
 
 安装
 - dpkg -i yakit.deb
