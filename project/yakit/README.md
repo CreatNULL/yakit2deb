@@ -1,8 +1,13 @@
 ## 前言
-- 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage
-- 进入解压后的目录（squashfs-root) 
-  - AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录，
-  - Yakit-xxx-xxx.AppImage 都是自动从官网（https://www.yaklang.com/）下载的, 我只是大自然的搬运工o(=•ェ•=)m
+
+Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 yakit_install_package 路径
+修改
+- DEBIAN/control 文件中的版本信息
+- DEBIAN/postinst 中的 YAKIT_VERSION
+- 打包 `dpkg-deb --root-owner-group --build yakit`
+
+安装
+- dpkg -i yakit.deb
 
 ## 目录结构：
 ```bash
@@ -47,6 +52,12 @@
 22 directories, 13 files
 ```
 
+## 开发
+- 发现 AppImage 特性是可以解压（xxx.AppImage --appimage-extract）就是为了解决在不支持FUSE的系统上使用AppImage
+- 进入解压后的目录（squashfs-root) 
+  - AppRun，是可以运行的 但是得设置一下环境变量 export APPDIR=解压的目录
+  - chrome-sandbox 和 其他一些目录设置权限 755
+
 ## 安装逻辑 （dpkg -i xxx.deb)
 - 检测程序是否已经在运行
 - 指定**解压目录**，设置默认 /usr/share/yakit/ （请**不要指定系统已经存在的路径**，例如 /usr/share、/root、而是在其后添加新的目录，例如 /tools/yakit, 会自动创建)
@@ -75,3 +86,5 @@
 - 弹窗指定新的目录
 - 移动到新的目录
 - 弹窗确认，删除旧的空的目录（防止误删）
+
+
