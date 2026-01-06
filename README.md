@@ -2,7 +2,7 @@
 我想要图标启动，本来我想着自己创建一个.desktop, 结果kali有个脚本，会自动检测是否为安装的软件，如果不是，就会清理掉你的.desktop。
 好吧，那我干脆自己搞成.deb 安装一下好了。
 
-Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 yakit_install_package 路径
+Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 project/tmp/yakit_install_package 路径
 
 修改
 - DEBIAN/control 文件中的版本信息
@@ -82,9 +82,9 @@ yakit
 
 ## 安装逻辑 （dpkg -i xxx.deb)
 - 检测程序是否已经在运行 （在 config 中实现了）
-- 指定**解压目录**，设置默认 /usr/share/yakit/ （请**不要指定系统已经存在的路径**，例如 /usr/share、/root、而是在其后添加新的目录，例如 /tools/yakit, 会自动创建)
+- 指定**解压目录**，默认 /usr/share/yakit/ （请**不要指定系统已经存在的路径**，例如 /usr/share、/root、而是在其后添加新的目录，例如 /tools/yakit, 会自动创建)
 - 解压
-  - 把 AppImage 解压，修改权限，让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
+  - 把 AppImage 解压，修改`squashfs-root`权限，让其他用户可以访问，进入解压后的目录，修改一些目录权限和chrome-sandbox权限
 - 创建启动脚本 /usr/bin/yakit，修改权限
 - 添加 .desktop 文件，更新缓存
 
@@ -99,15 +99,16 @@ yakit
 > 不考虑使用 DEBAIN/watch 文件，因为我就压根没有上游支持，自己手动放进去，重新打包，然后安装一下，如果觉的麻烦，可以修改 postinst 脚本，自动从官网先获取版本信息（官网有一个 version.txt 我记得是），然后拼接下载。但是这样就不符合规范了（咱自己用无所谓了哈哈）
 <br />
 
-- dpkg -i .deb 被认定为升级操作
-  - 也会检测是否运行 （依赖卸载后的脚本实现）
+- dpkg -i <package-name>.deb 被认定为升级操作
+  - 也会检测是否运行 （依赖卸载后脚本, 实现）
   - 升级会使用首次安装的目录 （安装后，想修改路径也行，但是请你确保清楚自己在做什么，因为**他会删除旧的目录，当然会弹窗确认是否删除，非交互模式下，不删除旧的目录**）
 
-## 修改解压目录
+## 二次修改解压目录 （不建议）
+- 虽然理论上不会受到影响，因为所有的项目默认在$HOME/yakit-projects 下，而相关配置在 $HOME/.config/yakit 下，所以移动解压后运行的目录应该不会有啥影响的。但是还是不建议，建议首次安装就指定想要的目录
 - 检测是否运行 （config确保）
 - 弹窗指定新的目录
     - 移动到新的目录
-    - 弹窗确认，删除旧的空的目录（防止误删）
+    - 弹窗确认，删除旧的空的目录（防止误删, 但是如果是默认目录 /usr/share/yakit 不会提示）
 
 ## 效果展示
 ### （1）首次安装
