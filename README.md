@@ -135,8 +135,9 @@ dpkg -r yakit 或 apt-get remove yakit
 <img width="575" height="112" alt="image" src="https://github.com/user-attachments/assets/573b683f-29ad-4bff-8211-39c6a77e8698" />
 当然也会检测是否在运行<br />
 <img width="1668" height="845" alt="image" src="https://github.com/user-attachments/assets/41895ca3-22ce-4238-94bc-17286fb2277c" />
+
 #### 3. 我自己对于这两种卸载的处理的区别：
-两种卸载都会删除 $HOME/yakit-projects 和 $/.config/yakit 两个目录，唯一区别就是下次安装是否还需要指定解压目录
+两种卸载都会删除 $HOME/yakit-projects 和 $HOME/.config/yakit 两个目录，唯一区别就是下次安装是否还需要指定解压目录
 
 ### (3) 修改解压目录
 ```bash
