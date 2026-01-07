@@ -157,39 +157,8 @@ https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-pac
 ### (1)、执行先后顺序
 我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么，以此验证文档：https://zhuanlan.zhihu.com/p/439622402 中描述执行的先后顺序是否和我实验的一致。我个人觉的开发的时候，写一下，挺好，直到脚本符合预期运行后，再删除这个调试代码，因为我不总是能记住这个顺序，如果使用了debconf，就会多一个脚本 DEBIAN/config , 此时顺序更加麻烦了。<br />
 <br />
-以下不涉及使用debconf情况
-#### 1. 正常执行的情况下
-```bash
-#!/bin/bash
-set -e
 
-echo "-----------"
-echo "安装后执行的脚本 -> postinst"
-echo "\$1的值: $1"
-echo "-----------"
-```
-set +e
-
-preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
-- 安装前执行的脚本 -> preinst
-- 安装后执行的脚本 -> postinst
-- 卸载前执行的脚本 -> prerm
-- 卸载后执行的脚本 -> postrm
-
-正常安装流程：
-- 安装前执行的脚本 -> preinst ($1的值: install)
-- 安装后执行的脚本 -> postinst ($1的值: configure)
-
-已经安装的情况下，又执行了一次 dpkg -i (顺序看着很奇怪，但是确实这样）
- - 卸载前执行的脚本 -> prerm ($1的值：upgrade)
- - 安装前执行的脚本 -> preinst ($1的值：upgrade)
- - 卸载后执行的脚本 -> postrm ($1的值：upgrade)
- - 安装后执行的脚本 -> postinst ($1的值: configure)
-
-卸载 (两种都是这样)
-- 卸载前执行的脚本 -> prerm  ($1的值: remove)
-- 卸载后执行的脚本 -> postrm ($1的值: remove)
-
+我的实验在这： https://github.com/CreatNULL/yakit2deb/tree/main/project/helloworld/usr/share/doc
 
 ### (2)、维护脚本的幂等性<br />
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#maintainer-scripts-idempotency -> 6.2.Maintainer scripts idempotency<br />
