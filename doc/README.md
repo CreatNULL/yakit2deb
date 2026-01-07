@@ -155,7 +155,10 @@ https://www.debian.org/doc/debian-policy/ch-controlfields.html#debian-binary-pac
 
 ## (二)、维护脚本相关的
 ### (1)、执行先后顺序
-我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么，以此验证文档：https://zhuanlan.zhihu.com/p/439622402 中描述执行的先后顺序是否和我实验的一致。我个人觉的开发的时候，写一下，挺好，直到脚本符合预期运行后，再删除这个调试代码。
+我在每个脚本的开头放入类似以下代码，观察执行先后顺序以及 $1 的值是什么，以此验证文档：https://zhuanlan.zhihu.com/p/439622402 中描述执行的先后顺序是否和我实验的一致。我个人觉的开发的时候，写一下，挺好，直到脚本符合预期运行后，再删除这个调试代码，因为我不总是能记住这个顺序，如果使用了debconf，就会多一个脚本 DEBIAN/config , 此时顺序更加麻烦了。<br />
+<br />
+以下不涉及使用debconf情况
+#### 1. 正常执行的情况下
 ```bash
 #!/bin/bash
 set -e
@@ -183,37 +186,10 @@ preinst、postinst、prerm、postrm 脚本，以及他们执行的先后顺序
  - 卸载后执行的脚本 -> postrm ($1的值：upgrade)
  - 安装后执行的脚本 -> postinst ($1的值: configure)
 
-卸载
+卸载 (两种都是这样)
 - 卸载前执行的脚本 -> prerm  ($1的值: remove)
 - 卸载后执行的脚本 -> postrm ($1的值: remove)
 
-
-这是从同一个包多次安装的角度来看，实际上还要复杂一点<br />
-- 比如这个明显可以看到在原来的卸载脚本出现错误后，会启用新安装使用的.deb 的卸载脚本去尝试卸载
-- 具体详细流程还是得看官方的文档（https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#details-of-unpack-phase-of-installation-or-upgrade）
-- 如果又配置了 debconf ，也就是使用 DEBIAN/config， 顺序又会复杂一点，所以维护脚本的幂等性就重要了，哈哈，但是具体怎么个执行顺序没研究。
-```bash
-┌──(root㉿kali)-[/home/vbgaga/vscode-project/deb_make/project]
-└─# dpkg -i yakit.deb
-(正在读取数据库 ... 系统当前共安装有 465779 个文件和目录。)
-准备解压 yakit.deb  ...
-正在解压 yakit (1.4.5-1226) 并覆盖 (1.4.5-1226) ...
-dpkg: 警告: 旧的 yakit 软件包 post-removal 脚本 子进程返回错误状态 10
-dpkg: 现在尝试使用新软件包所带的脚本...
-dpkg: ... 它看起来没有问题
-正在设置 yakit (1.4.5-1226) ...
-Copy /tmp/yakit_install_package/Yakit-1.4.5-1226-linux-amd64.AppImage to -> /usr/share/yakit
-Extract files from AppImage.
-squashfs-root/.DirIcon
-squashfs-root/AppRun
-squashfs-root/LICENSE.electron.txt
-squashfs-root/LICENSE.md
-squashfs-root/LICENSES.chromium.html
-squashfs-root/bins
-squashfs-root/bins/database
-squashfs-root/bins/database/flag.txt
-
-```
 
 ### (2)、维护脚本的幂等性<br />
 https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html#maintainer-scripts-idempotency -> 6.2.Maintainer scripts idempotency<br />
