@@ -142,5 +142,10 @@ Yakit运行的检测<br />
 执行脚本同步更新<br />
 <img width="796" height="222" alt="image" src="https://github.com/user-attachments/assets/d9b664e2-ea1e-4c65-88da-e42566c0f304" />
 
+### 启动后修复网卡权限
+<img width="1397" height="642" alt="image" src="https://github.com/user-attachments/assets/5e3cf0dd-4c8b-478b-aedb-7227eaa1d058" />
+
+退出后，重启yakit
+<img width="906" height="652" alt="image" src="https://github.com/user-attachments/assets/79bb29e5-1e3b-49ce-bc37-a5eea273530e" />
 
 
