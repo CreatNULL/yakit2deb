@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+echo "按装后执行的脚本 -> postinst $1"
+

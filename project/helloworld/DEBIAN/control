@@ -1,0 +1,8 @@
+Package: helloworld
+Version: 2025.12.2
+Architecture: all
+Maintainer: Your <test@qq.com>
+Section: net
+Priority: optional
+Homepage: https://example.com
+Description: print hello world

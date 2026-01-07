@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+echo "安装前执行的脚本 - preinst -> $1"

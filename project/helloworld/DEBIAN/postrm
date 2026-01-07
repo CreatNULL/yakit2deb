@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+echo "卸载后执行的脚本 - postrm -> $1"
+
+case "$1" in
+    remove|purge)
+        echo "卸载中"
+    ;;
+esac
