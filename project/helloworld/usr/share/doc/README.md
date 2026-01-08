@@ -96,7 +96,7 @@ dpkg -i
 正在处理用于 kali-menu (2023.2.3) 的触发器 ...
 ```
 
-## 实验三、模拟升级 - 安装前出现问题
+## 实验三、模拟升级 - 安装前脚本出现问题
 - 卸载前执行的脚本 - prerm -> $1: upgrade
 - 安装前执行的脚本 - preinst -> $1: upgrade new
 - 卸载后执行的脚本 - postrm -> $1: abort-upgrade new
@@ -154,7 +154,7 @@ dpkg: 处理软件包 helloworld (--install)时出错：
  helloworld
 ```
 
-## 三、实验五 - 模拟安装升级 - 卸载前出现问题
+## 三、实验五 - 模拟安装升级 - 卸载前脚本出现问题
 ### （N、N）
 - 卸载前执行的脚本 - prerm -> $1: upgrade
 - 卸载前执行的脚本 - prerm -> $1: failed-upgrade new
