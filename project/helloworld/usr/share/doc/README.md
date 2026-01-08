@@ -1,7 +1,7 @@
 ## 一、说明
 这是一个用来测试，的项目，探索四个维护脚本执行逻辑。
 
-测试代码，测试的时候，将代码分别放到不同的脚本，然后打包运行 helloword，启动，然后尝试 升级/卸载
+测试代码，测试的时候，将代码分别放到不同的脚本，然后打包运行 helloword，启动，然后尝试 升级/卸载<br />
 ```basb
 check_some_run() {
     # Check if any Burp Suite processes are running
@@ -62,6 +62,7 @@ check_some_run
 dpkg -i helloworld.deb
 - 安装前执行的脚本 - preinst -> $1: install
 - 安装后执行的脚本 -> postinst $1: configure
+
 输出:<br />
 ```bash
 ──(root㉿kali)-[/home/vbgaga/vscode-project/tool2deb/project]
