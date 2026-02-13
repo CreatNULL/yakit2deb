@@ -2,6 +2,11 @@
 我想要图标启动，本来我想着自己创建一个.desktop, 结果kali有个脚本，会自动检测是否为安装的软件，如果不是，就会清理掉你的.desktop。
 好吧，那我干脆自己搞成.deb 安装一下好了。
 
+## 我打包好的
+https://github.com/CreatNULL/yakit2deb/releases/tag/000000
+<br />
+
+## 手动
 Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 项目：yakit2deb/project/yakit/tmp/yakit_install_package 路径(自己手动创建）
 
 修改
