@@ -2,7 +2,7 @@
 我想要图标启动，本来我想着自己创建一个.desktop, 结果kali有个脚本，会自动检测是否为安装的软件，如果不是，就会清理掉你的.desktop。
 好吧，那我干脆自己搞成.deb 安装一下好了。
 
-Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 project/tmp/yakit_install_package 路径
+Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然后放入 项目：yakit2deb/project/yakit/tmp/yakit_install_package 路径(自己手动创建）
 
 修改
 - DEBIAN/control 文件中的版本信息
@@ -11,7 +11,8 @@ Yakit-xxx-xxx.AppImage 自己从官网（https://www.yaklang.com/）下载，然
 
 如果想要自己打包其他的，例如尝试制作破解版的burpsuite.deb，可以看看https://github.com/CreatNULL/yakit2deb/blob/main/doc/README.md ,反正逻辑差不多吧感觉。
 
-确保以下权限（755），当然如果不修改，反正打包的时候会报错提示的，问题不大，到时候再修改就好了：
+
+切换到 root ，确保以下权限（755），当然如果不修改，反正打包的时候会报错提示的，问题不大，到时候再修改就好了：
 ```
 /home/createnull/vscode-project/deb_make/project/yakit/DEBIAN
 
